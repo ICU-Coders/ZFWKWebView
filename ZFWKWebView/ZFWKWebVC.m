@@ -129,13 +129,26 @@ static inline BOOL isIPhoneXSeries() {
         _showBottomBar = YES;
         _callbacks = [NSMutableDictionary dictionaryWithCapacity:100];
         _progressBarHeight = 2.5;
-
-        _closeButtonImage = [UIImage imageNamed:@"ImageResource.bundle/CloseButtonIcon"];
-        _goBackButtonNomalImage = [UIImage imageNamed:@"ImageResource.bundle/BackButtonIcon"];
-        _goBackButtonDisableImage =[UIImage imageNamed:@"ImageResource.bundle/BackButtonIconUnable"];
-        _goForwardButtonNomalImage = [UIImage imageNamed:@"ImageResource.bundle/ForwardButtonIcon"];
-        _goForwardButtonDisableImage = [UIImage imageNamed:@"ImageResource.bundle/ForwardButtonIconUnable"];
-        _refreshButtonImage = [UIImage imageNamed:@"ImageResource.bundle/refresh"];
+        
+        NSBundle *bundle = [NSBundle bundleForClass:[ZFWKWebVC class]];
+        NSURL *url = [bundle URLForResource:@"ImageResource" withExtension:@"bundle"];
+        NSBundle *imageBundle = [NSBundle bundleWithURL:url];
+        
+        _closeButtonImage = [UIImage imageWithContentsOfFile:[imageBundle pathForResource:@"CloseButtonIcon@2x" ofType:@"png"]];
+        _goBackButtonNomalImage = [UIImage imageWithContentsOfFile:[imageBundle pathForResource:@"BackButtonIcon@2x" ofType:@"png"]];
+        _goBackButtonDisableImage = [UIImage imageWithContentsOfFile:[imageBundle pathForResource:@"BackButtonIconUnable@2x" ofType:@"png"]];
+        _goForwardButtonNomalImage = [UIImage imageWithContentsOfFile:[imageBundle pathForResource:@"ForwardButtonIcon@2x" ofType:@"png"]];
+        _goForwardButtonDisableImage = [UIImage imageWithContentsOfFile:[imageBundle pathForResource:@"ForwardButtonIconUnable@2x" ofType:@"png"]];
+        _refreshButtonImage = [UIImage imageWithContentsOfFile:[imageBundle pathForResource:@"refresh@2x" ofType:@"png"]];
+        
+        
+//        _closeButtonImage = [UIImage imageNamed:@"CloseButtonIcon" inBundle:imageBundle compatibleWithTraitCollection:nil];
+//        _goBackButtonNomalImage = [UIImage imageNamed:@"BackButtonIcon" inBundle:imageBundle compatibleWithTraitCollection:nil];
+//        _goBackButtonDisableImage =[UIImage imageNamed:@"BackButtonIconUnable" inBundle:imageBundle compatibleWithTraitCollection:nil];
+//        _goForwardButtonNomalImage = [UIImage imageNamed:@"ForwardButtonIcon" inBundle:imageBundle compatibleWithTraitCollection:nil];
+//        _goForwardButtonDisableImage = [UIImage imageNamed:@"ForwardButtonIconUnable" inBundle:imageBundle compatibleWithTraitCollection:nil];
+//        _refreshButtonImage = [UIImage imageNamed:@"refresh" inBundle:imageBundle compatibleWithTraitCollection:nil];
+        
         _titleColor = ZF_WK_BLACKCLOLR;
         _titleFont = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
     }
