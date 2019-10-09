@@ -10,9 +10,8 @@
 #import <WebKit/WebKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
-
-@interface ZFWKWebVCBottomBar : UIView
-@end
+@interface ZFWKWebVCLoadFailedView : UIView @end
+@interface ZFWKWebVCBottomBar : UIView @end
 
 @class ZFWKWebVC;
 typedef void(^jsBrigeCallBack)(ZFWKWebVC *target, id body);
@@ -39,6 +38,8 @@ typedef void(^jsBrigeCallBack)(ZFWKWebVC *target, id body);
 
 @property (nonatomic, strong) UIColor *titleColor;
 @property (nonatomic, strong) UIFont *titleFont;
+
+@property (nonatomic, strong) UIImage *refreshButtonImage;
 
 @property(nonatomic, copy) NSString *customUserAgent;
 

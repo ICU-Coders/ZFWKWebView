@@ -11,6 +11,7 @@
 #define ZF_WK_BACKGROUD_COLOR [UIColor colorWithRed:236/255.0 green:236/255.0 blue:236/255.0 alpha:1.0]
 #define ZF_WK_BLACKCLOLR [UIColor colorWithRed:19/255.0 green:19/255.0 blue:54/255.0 alpha:1.0]
 #define ZF_WK_LINE_COLOR [UIColor colorWithRed:240/255.0 green:240/255.0 blue:243/255.0 alpha:1.0]
+#define ZF_WK_GARY_TEXT_COLOR [UIColor colorWithRed:103/255.0 green:103/255.0 blue:103/255.0 alpha:1.0]
 
 #define ZF_SCREEN_WIDTH self.view.frame.size.width
 #define ZF_SCREEN_HEIGHT self.view.frame.size.height
@@ -24,6 +25,56 @@ static inline BOOL isIPhoneXSeries() {
     }
     return iPhoneXSeries;
 }
+
+@interface ZFWKWebVCLoadFailedView ()
+@property (nonatomic, strong) UIButton *hoverButton;
+@property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) UITextView *textLabel;
+@end
+@implementation ZFWKWebVCLoadFailedView
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.imageView = ({
+            UIImageView *imageView = [[UIImageView alloc] init];
+            imageView;
+        });
+        [self addSubview:self.imageView];
+        
+        self.textLabel = ({
+            UITextView *label = [[UITextView alloc] init];
+            label.font = [UIFont systemFontOfSize:16 weight:UIFontWeightRegular];
+            label.textAlignment = NSTextAlignmentCenter;
+            label.backgroundColor = [UIColor clearColor];
+            label.userInteractionEnabled = NO;
+            label.textColor = ZF_WK_GARY_TEXT_COLOR;
+            label;
+        });
+        [self addSubview:self.textLabel];
+        
+        self.hoverButton = ({
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            [button setBackgroundColor:[UIColor clearColor]];
+            button;
+        });
+        [self addSubview:self.hoverButton];
+        
+        self.hidden = YES;
+        
+    }
+    return self;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    [self.hoverButton setFrame:self.bounds];
+    [self.imageView setFrame:CGRectMake(0, 0, 44, 44)];
+    [self.imageView setCenter:CGPointMake(self.center.x, self.center.y  - 22 - 200)];
+    [self.textLabel setFrame:CGRectMake(20, self.center.y - 200 + 10, self.frame.size.width - 40, 300)];
+}
+@end
 
 @interface ZFWKWebVCBottomBar ()
 @property (nonatomic, strong) UIButton *backButton;
@@ -84,6 +135,7 @@ static inline BOOL isIPhoneXSeries() {
         _goBackButtonDisableImage =[UIImage imageNamed:@"ImageResource.bundle/BackButtonIconUnable"];
         _goForwardButtonNomalImage = [UIImage imageNamed:@"ImageResource.bundle/ForwardButtonIcon"];
         _goForwardButtonDisableImage = [UIImage imageNamed:@"ImageResource.bundle/ForwardButtonIconUnable"];
+        _refreshButtonImage = [UIImage imageNamed:@"ImageResource.bundle/refresh"];
         _titleColor = ZF_WK_BLACKCLOLR;
         _titleFont = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
     }
@@ -107,8 +159,8 @@ static inline BOOL isIPhoneXSeries() {
 @property (nonatomic, strong) UIButton *closeButton;
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIProgressView *progressView;
-@property (nonatomic, strong) UILabel *loadFailedLabel;
 @property (nonatomic, strong) UILabel *originLabel;
+@property (nonatomic, strong) ZFWKWebVCLoadFailedView *loadFailedView;
 @end
 
 @implementation ZFWKWebVC
@@ -248,18 +300,11 @@ static inline BOOL isIPhoneXSeries() {
     [self.webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:@"ZFContext"];
     [self.webView addObserver:self forKeyPath:@"URL" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:@"ZFContext"];
     [self.webView.scrollView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:@"ZFContext"];
-    // TODO: 加载失败 点击重试
-    // TODO: 错误显示 eg. http://dada
-    
-    self.loadFailedLabel = ({
-        UILabel *label = [[UILabel alloc] init];
-        label.textColor = ZF_WK_BLACKCLOLR;
-        label.textAlignment = NSTextAlignmentCenter;
-        label.hidden = YES;
-        label;
-    });
-    [self.webView addSubview:self.loadFailedLabel];
-    
+ 
+    self.loadFailedView = [[ZFWKWebVCLoadFailedView alloc] initWithFrame:CGRectZero];
+    self.loadFailedView.imageView.image = self.conf.refreshButtonImage;
+    [self.loadFailedView.hoverButton addTarget:self action:@selector(refresh) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.loadFailedView];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
@@ -324,7 +369,7 @@ static inline BOOL isIPhoneXSeries() {
     y += navHeight;
     [self.webView setFrame:CGRectMake(0, y, ZF_SCREEN_WIDTH, ZF_SCREEN_HEIGHT - y)];
     [self.originLabel setFrame:CGRectMake(10, 30, ZF_SCREEN_WIDTH - 20, 35)];
-    
+    [self.loadFailedView setFrame:CGRectMake(0, y, ZF_SCREEN_WIDTH, ZF_SCREEN_HEIGHT - y)];
 }
 
 - (void)bottomBarHidden:(BOOL)flag {
@@ -340,7 +385,12 @@ static inline BOOL isIPhoneXSeries() {
         [self.bottomBar setFrame:CGRectMake(0, y, ZF_SCREEN_WIDTH, barH)];
     }];
 }
-
+- (void)refresh {
+    NSLog(@"%s", __func__);
+    [self.webView stopLoading];
+//    self.loadFailedView.hidden = YES;
+    [self.webView reload];
+}
 - (void)goBack {
     if ([self.webView canGoBack]) [self.webView goBack];
 }
@@ -409,7 +459,7 @@ static inline BOOL isIPhoneXSeries() {
 // 当内容开始返回时调用
 - (void)webView:(WKWebView *)webView didCommitNavigation:(WKNavigation *)navigation {
     NSLog(@"%s", __func__);
-    self.loadFailedLabel.hidden = NO;
+    self.loadFailedView.hidden = YES;
     
 }
 // 页面加载完成之后调用
@@ -418,15 +468,29 @@ static inline BOOL isIPhoneXSeries() {
     
 }
 // 页面加载失败时调用
-- (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation {
-    NSLog(@"%s", __func__);
+- (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error {
+    [self showError:error];
+}
+- (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error {
+    [self showError:error];
 }
 
-
-- (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error {
-    NSLog(@"%s", __func__);
-    self.loadFailedLabel.hidden = NO;
-    self.loadFailedLabel.text = error.localizedDescription;
+- (void)showError:(NSError *)error {
+    if (!error) return;
+    NSLog(@"%s: %@ %@ %@", __func__, error.localizedDescription, error.localizedFailureReason, error.localizedRecoverySuggestion);
+        if (error.code == NSURLErrorCancelled) {
+    //        return;
+        }
+    self.loadFailedView.hidden = NO;
+    NSString *text = [NSString stringWithFormat:@"点击屏幕重试\n\n错误:%@", error.localizedDescription];
+    if (error.localizedFailureReason) {
+        text = [text stringByAppendingFormat:@"\n原因:%@", error.localizedFailureReason];
+    }
+    if (error.localizedRecoverySuggestion) {
+        text = [text stringByAppendingFormat:@"\n解决:%@", error.localizedRecoverySuggestion];
+    }
+    self.titleLabel.text = @"无法打开此网页";
+    self.loadFailedView.textLabel.text = text;
 }
 
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
