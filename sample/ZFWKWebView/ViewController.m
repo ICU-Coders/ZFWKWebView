@@ -39,14 +39,32 @@
         [self.view addSubview:button];
         [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
-    
-    
-    
 }
+
+
 - (void)buttonClicked:(UIButton *)button {
     if (button.tag == 1) {
         ZFWKUserDefaultConf *userConf = [[ZFWKUserDefaultConf alloc] init];
-        userConf.openUrl = @"https://dada";
+        [userConf addMethodName:ZFWKWebViewEventStartLoadKey callback:^(ZFWKWebVC * _Nonnull target, id  _Nullable body) {
+            NSLog(@"ZFWKWebViewEventStartLoadKey");
+        }];
+        [userConf addMethodName:ZFWKWebViewEventLoadFailedKey callback:^(ZFWKWebVC * _Nonnull target, id  _Nullable body) {
+            NSLog(@"ZFWKWebViewEventLoadFailedKey");
+        }];
+        [userConf addMethodName:ZFWKWebViewEventFinishRecevicedKey callback:^(ZFWKWebVC * _Nonnull target, id  _Nullable body) {
+            NSLog(@"ZFWKWebViewEventFinishRecevicedKey");
+        }];
+        [userConf addMethodName:ZFWKWebViewEventStartRecevicedKey callback:^(ZFWKWebVC * _Nonnull target, id  _Nullable body) {
+            NSLog(@"ZFWKWebViewEventStartRecevicedKey");
+        }];
+        [userConf addMethodName:ZFWKWebViewEventCloseKey callback:^(ZFWKWebVC * _Nonnull target, id  _Nullable body) {
+            NSLog(@"ZFWKWebViewEventCloseKey");
+        }];
+        [userConf addMethodName:ZFWKWebViewEventRefreshKey callback:^(ZFWKWebVC * _Nonnull target, id  _Nullable body) {
+            NSLog(@"ZFWKWebViewEventRefreshKey");
+        }];
+        
+        userConf.openUrl = @"https://www.ba";
         ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithConf:userConf];
         [self presentViewController:web animated:YES completion:nil];
     } else {

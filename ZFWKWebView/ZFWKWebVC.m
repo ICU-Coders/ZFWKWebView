@@ -16,6 +16,14 @@
 #define ZF_SCREEN_WIDTH self.view.frame.size.width
 #define ZF_SCREEN_HEIGHT self.view.frame.size.height
 
+NSString * const ZFWKWebViewEventStartLoadKey = @"ZFWKWebViewEventStartLoadKey";
+NSString * const ZFWKWebViewEventStartRecevicedKey = @"ZFWKWebViewEventStartRecevicedKey";
+NSString * const ZFWKWebViewEventFinishRecevicedKey = @"ZFWKWebViewEventFinishRecevicedKey";
+NSString * const ZFWKWebViewEventLoadFailedKey = @"ZFWKWebViewEventLoadFailedKey";
+NSString * const ZFWKWebViewEventRefreshKey = @"ZFWKWebViewEventRefreshKey";
+NSString * const ZFWKWebViewEventCloseKey = @"ZFWKWebViewEventCloseKey";
+
+
 static inline BOOL isIPhoneXSeries() {
     BOOL iPhoneXSeries = NO;
     if (UIDevice.currentDevice.userInterfaceIdiom != UIUserInterfaceIdiomPhone) return iPhoneXSeries;
@@ -147,7 +155,7 @@ static inline BOOL isIPhoneXSeries() {
     }
     return self;
 }
-- (void)addMethodName:(NSString *)name callback:(jsBrigeCallBack)callback {
+- (void)addMethodName:(NSString *)name callback:(zf_wkWebViewEventCallBack)callback {
     if (callback) self.callbacks[name] = callback;
 }
 
@@ -391,10 +399,14 @@ static inline BOOL isIPhoneXSeries() {
         [self.bottomBar setFrame:CGRectMake(0, y, ZF_SCREEN_WIDTH, barH)];
     }];
 }
+
+
+
 - (void)refresh {
-    NSLog(@"%s", __func__);
+    zf_wkWebViewEventCallBack callback = self.conf.callbacks[ZFWKWebViewEventRefreshKey];
+    if (callback) callback(self, nil);
+    
     [self.webView stopLoading];
-//    self.loadFailedView.hidden = YES;
     [self.webView reload];
 }
 - (void)goBack {
@@ -406,8 +418,20 @@ static inline BOOL isIPhoneXSeries() {
 }
 
 - (void)close {
+    
+    zf_wkWebViewEventCallBack callback = self.conf.callbacks[ZFWKWebViewEventCloseKey];
+    if (callback) callback(self, nil);
+    
     if (self.navigationController.topViewController == self) {
-        [self.navigationController popViewControllerAnimated:YES];
+        switch (self.conf.popType) {
+            case ZFWKWebVCPopTypeRoot:
+                [self.navigationController popToRootViewControllerAnimated:YES];
+                break;
+            case ZFWKWebVCPopTypePervious:
+            default:
+                [self.navigationController popViewControllerAnimated:YES];
+                break;
+        }
     } else {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
@@ -434,7 +458,7 @@ static inline BOOL isIPhoneXSeries() {
 
 
 - (void)removeUserScript:(NSString *)script {
-    jsBrigeCallBack callback = self.conf.callbacks[script];
+    zf_wkWebViewEventCallBack callback = self.conf.callbacks[script];
     if (callback) {
         [self.conf.callbacks removeObjectForKey:script];
     }
@@ -460,18 +484,19 @@ static inline BOOL isIPhoneXSeries() {
 }
 // 页面开始加载时调
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(WKNavigation *)navigation {
-    NSLog(@"%s", __func__);
+    zf_wkWebViewEventCallBack callback = self.conf.callbacks[ZFWKWebViewEventStartLoadKey];
+    if (callback) callback(self, nil);
 }
 // 当内容开始返回时调用
 - (void)webView:(WKWebView *)webView didCommitNavigation:(WKNavigation *)navigation {
-    NSLog(@"%s", __func__);
+    zf_wkWebViewEventCallBack callback = self.conf.callbacks[ZFWKWebViewEventStartRecevicedKey];
+    if (callback) callback(self, nil);
     self.loadFailedView.hidden = YES;
-    
 }
 // 页面加载完成之后调用
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
-    NSLog(@"%s", __func__);
-    
+    zf_wkWebViewEventCallBack callback = self.conf.callbacks[ZFWKWebViewEventFinishRecevicedKey];
+    if (callback) callback(self, nil);
 }
 // 页面加载失败时调用
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error {
@@ -483,10 +508,14 @@ static inline BOOL isIPhoneXSeries() {
 
 - (void)showError:(NSError *)error {
     if (!error) return;
-    NSLog(@"%s: %@ %@ %@", __func__, error.localizedDescription, error.localizedFailureReason, error.localizedRecoverySuggestion);
-        if (error.code == NSURLErrorCancelled) {
-    //        return;
-        }
+    
+    zf_wkWebViewEventCallBack callback = self.conf.callbacks[ZFWKWebViewEventLoadFailedKey];
+    if (callback) callback(self, error);
+    
+//    NSLog(@"%s: %@ %@ %@", __func__, error.localizedDescription, error.localizedFailureReason, error.localizedRecoverySuggestion);
+//        if (error.code == NSURLErrorCancelled) {
+//    //        return;
+//        }
     self.loadFailedView.hidden = NO;
     NSString *text = [NSString stringWithFormat:@"点击屏幕重试\n\n错误:%@", error.localizedDescription];
     if (error.localizedFailureReason) {
@@ -508,7 +537,7 @@ static inline BOOL isIPhoneXSeries() {
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message {
     NSLog(@"%s: %@", __func__, message.name);
     if (!message.name) return;
-    jsBrigeCallBack callback = self.conf.callbacks[message.name];
+    zf_wkWebViewEventCallBack callback = self.conf.callbacks[message.name];
     if (!callback) return;
     NSString *jsonStr = message.body;
     NSData *data = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];

@@ -14,9 +14,25 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ZFWKWebVCBottomBar : UIView @end
 
 @class ZFWKWebVC;
-typedef void(^jsBrigeCallBack)(ZFWKWebVC *target, id body);
+typedef void(^zf_wkWebViewEventCallBack)(ZFWKWebVC *target, id _Nullable body);
+
+typedef NS_ENUM(NSUInteger, ZFWKWebVCPopType) {
+    ZFWKWebVCPopTypePervious,
+    ZFWKWebVCPopTypeRoot,
+};
+
+
+typedef NSString * ZFWKWebViewEventKey NS_STRING_ENUM;
+FOUNDATION_EXPORT ZFWKWebViewEventKey const ZFWKWebViewEventStartLoadKey;
+FOUNDATION_EXPORT ZFWKWebViewEventKey const ZFWKWebViewEventStartRecevicedKey;
+FOUNDATION_EXPORT ZFWKWebViewEventKey const ZFWKWebViewEventFinishRecevicedKey;
+FOUNDATION_EXPORT ZFWKWebViewEventKey const ZFWKWebViewEventLoadFailedKey;
+FOUNDATION_EXPORT ZFWKWebViewEventKey const ZFWKWebViewEventRefreshKey;
+FOUNDATION_EXPORT ZFWKWebViewEventKey const ZFWKWebViewEventCloseKey;
+
 
 @interface ZFWKWebVCConf : NSObject
+@property(nonatomic, assign) ZFWKWebVCPopType popType;
 
 @property(nonatomic, copy) NSString *openUrl;
 
@@ -43,15 +59,15 @@ typedef void(^jsBrigeCallBack)(ZFWKWebVC *target, id body);
 
 @property(nonatomic, copy) NSString *customUserAgent;
 
+
 /**
  * Desc 注册方法，当js调用时会回调到OC
  * name js执行方法名
  * callback 回调 NSArray/NSDictionary/NSString/NSNumber
  */
-- (void)addMethodName:(NSString *)name callback:(jsBrigeCallBack)callback;
+- (void)addMethodName:(NSString *)name callback:(zf_wkWebViewEventCallBack)callback;
 
 @end
-
 
 @interface ZFWKWebVC : UIViewController
 - (instancetype)initWithDefaultConfig;
@@ -68,6 +84,8 @@ typedef void(^jsBrigeCallBack)(ZFWKWebVC *target, id body);
 
 @property (nonatomic, strong, readonly) WKWebView *webView;
 @property (nonatomic, strong, nullable) ZFWKWebVCBottomBar *bottomBar;
+
+
 
 @end
 
