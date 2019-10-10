@@ -41,12 +41,14 @@
     }
 }
 
-
+- (void)temp {
+    NSLog(@"temp");
+}
 - (void)buttonClicked:(UIButton *)button {
     if (button.tag == 1) {
         ZFWKUserDefaultConf *userConf = [[ZFWKUserDefaultConf alloc] init];
         [userConf addMethodName:ZFWKWebViewEventStartLoadKey callback:^(ZFWKWebVC * _Nonnull target, id  _Nullable body) {
-            NSLog(@"ZFWKWebViewEventStartLoadKey");
+            [self temp];
         }];
         [userConf addMethodName:ZFWKWebViewEventLoadFailedKey callback:^(ZFWKWebVC * _Nonnull target, id  _Nullable body) {
             NSLog(@"ZFWKWebViewEventLoadFailedKey");

@@ -12,6 +12,7 @@
 NS_ASSUME_NONNULL_BEGIN
 @interface ZFWKWebVCLoadFailedView : UIView @end
 @interface ZFWKWebVCBottomBar : UIView @end
+@interface ZFWKWebVCTipsView : UIView @end
 
 @class ZFWKWebVC;
 typedef void(^zf_wkWebViewEventCallBack)(ZFWKWebVC *target, id _Nullable body);
@@ -22,14 +23,16 @@ typedef NS_ENUM(NSUInteger, ZFWKWebVCPopType) {
 };
 
 
-typedef NSString * ZFWKWebViewEventKey NS_STRING_ENUM;
-FOUNDATION_EXPORT ZFWKWebViewEventKey const ZFWKWebViewEventStartLoadKey;
-FOUNDATION_EXPORT ZFWKWebViewEventKey const ZFWKWebViewEventStartRecevicedKey;
-FOUNDATION_EXPORT ZFWKWebViewEventKey const ZFWKWebViewEventFinishRecevicedKey;
-FOUNDATION_EXPORT ZFWKWebViewEventKey const ZFWKWebViewEventLoadFailedKey;
-FOUNDATION_EXPORT ZFWKWebViewEventKey const ZFWKWebViewEventRefreshKey;
-FOUNDATION_EXPORT ZFWKWebViewEventKey const ZFWKWebViewEventCloseKey;
-
+typedef NSString * ZFWKWebViewEventKey NS_EXTENSIBLE_STRING_ENUM;
+UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventStartLoadKey;
+UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventStartRecevicedKey;
+UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventFinishRecevicedKey;
+UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventLoadFailedKey;
+UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventRefreshKey;
+UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventCloseKey;
+UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventRightButtonClickKey;
+UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventGoBackKey;
+UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventGoForwardKey;
 
 @interface ZFWKWebVCConf : NSObject
 @property(nonatomic, assign) ZFWKWebVCPopType popType;
@@ -57,7 +60,16 @@ FOUNDATION_EXPORT ZFWKWebViewEventKey const ZFWKWebViewEventCloseKey;
 
 @property (nonatomic, strong) UIImage *refreshButtonImage;
 
-@property(nonatomic, copy) NSString *customUserAgent;
+@property(nonatomic, copy) NSString *customUserAgent; // TODO
+
+@property(nonatomic, assign) BOOL showRightNavigationButton; // defult NO
+@property (nonatomic, strong) UIImage *rightNavigationButtonNomalImage;
+@property (nonatomic, strong) UIImage *rightNavigationButtonDisableImage;
+@property(nonatomic, copy) NSString *rightNavigationButtonTitle;
+@property (nonatomic, strong) UIFont *rightNavigationButtonTextFont;
+@property (nonatomic, strong) UIColor *rightNavigationButtonTextColor;
+
+@property(nonatomic, assign) BOOL closeButtonGobackFirst; // if can goback, close button go back first
 
 
 /**
@@ -84,7 +96,6 @@ FOUNDATION_EXPORT ZFWKWebViewEventKey const ZFWKWebViewEventCloseKey;
 
 @property (nonatomic, strong, readonly) WKWebView *webView;
 @property (nonatomic, strong, nullable) ZFWKWebVCBottomBar *bottomBar;
-
 
 
 @end
