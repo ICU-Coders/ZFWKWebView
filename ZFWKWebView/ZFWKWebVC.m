@@ -390,7 +390,7 @@ static inline BOOL isIPhoneXSeries() {
     {
         // Add observer
         for (NSString *path in [self webViewObserverPaths]) {
-            [self.webView addObserver:self forKeyPath:path options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionInitial context:@"ZFContext"];
+            [self.webView addObserver:self forKeyPath:path options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionOld context:@"ZFContext"];
         }
         [self.webView.scrollView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:@"ZFContext"];
         
@@ -407,9 +407,13 @@ static inline BOOL isIPhoneXSeries() {
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
     id value = change[NSKeyValueChangeNewKey];
+    id oldValue = change[NSKeyValueChangeOldKey];
     if ([value isKindOfClass:[NSNull class]]) {
         NSLog(@"ObserveValueForKeyPath:%@ is null", keyPath);
         value = nil;
+    }
+    if ([oldValue isKindOfClass:[NSNull class]]) {
+        oldValue = nil;
     }
     if ([object isKindOfClass:[WKWebView class]]) {
         if ([keyPath isEqualToString:@"title"]) {
@@ -427,8 +431,10 @@ static inline BOOL isIPhoneXSeries() {
             self.progressView.progress = progress;
             self.progressView.hidden = progress >= 1.0;
         } else if ([keyPath isEqualToString:@"URL"]) {
-            NSURL *url = value;
-            if (url) self.originLabel.text = [NSString stringWithFormat:@"此网页由%@提供", url.host];
+            if (value) self.originLabel.text = [NSString stringWithFormat:@"此网页由%@提供", ((NSURL *)value).host];
+            if (!value && !oldValue) {
+                [(WKWebView *)object reload];
+            }
         }
     } else if ([object isKindOfClass:[UIScrollView class]]) {
         if ([keyPath isEqualToString:@"contentOffset"]) {

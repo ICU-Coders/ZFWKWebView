@@ -71,7 +71,7 @@
         [self presentViewController:web animated:YES completion:nil];
     } else {
         ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithDefaultConfig];
-        [web.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://www.baidu.com"]]];
+        [web.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://www.apple.com.cn"]]];
 //        [self presentViewController:web animated:YES completion:nil];
         [self.navigationController pushViewController:web animated:YES];
     }

@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "ZFWKWebView"
-  s.version      = "1.0.6"
+  s.version      = "1.0.7"
   s.summary      = "No short description of ZFWKWebView."
   s.homepage     = "https://github.com/FranLucky/ZFWKWebView"
   s.license      = { :type => "MIT", :file => "LICENSE"}
