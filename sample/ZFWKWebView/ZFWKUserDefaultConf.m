@@ -17,7 +17,7 @@
         self.progressBackgroundColor = [UIColor blackColor];
         self.showRightNavigationButton = YES;
         self.rightNavigationButtonTitle = @"跳过";
-        [self addMethodName:@"test" callback:^(ZFWKWebVC * _Nonnull target, id  _Nonnull body) {
+        [self addMethodName:@"test" callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, id  _Nullable body) {
             
         }];
     }

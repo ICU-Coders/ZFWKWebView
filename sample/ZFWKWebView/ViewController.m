@@ -47,22 +47,22 @@
 - (void)buttonClicked:(UIButton *)button {
     if (button.tag == 1) {
         ZFWKUserDefaultConf *userConf = [[ZFWKUserDefaultConf alloc] init];
-        [userConf addMethodName:ZFWKWebViewEventStartLoadKey callback:^(ZFWKWebVC * _Nonnull target, id  _Nullable body) {
+        [userConf addMethodName:ZFWKWebViewEventStartLoadKey callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, id  _Nullable body) {
             [self temp];
         }];
-        [userConf addMethodName:ZFWKWebViewEventLoadFailedKey callback:^(ZFWKWebVC * _Nonnull target, id  _Nullable body) {
+        [userConf addMethodName:ZFWKWebViewEventLoadFailedKey callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, id  _Nullable body) {
             NSLog(@"ZFWKWebViewEventLoadFailedKey");
         }];
-        [userConf addMethodName:ZFWKWebViewEventFinishRecevicedKey callback:^(ZFWKWebVC * _Nonnull target, id  _Nullable body) {
+        [userConf addMethodName:ZFWKWebViewEventFinishRecevicedKey callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, id  _Nullable body) {
             NSLog(@"ZFWKWebViewEventFinishRecevicedKey");
         }];
-        [userConf addMethodName:ZFWKWebViewEventStartRecevicedKey callback:^(ZFWKWebVC * _Nonnull target, id  _Nullable body) {
+        [userConf addMethodName:ZFWKWebViewEventStartRecevicedKey callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, id  _Nullable body) {
             NSLog(@"ZFWKWebViewEventStartRecevicedKey");
         }];
-        [userConf addMethodName:ZFWKWebViewEventCloseKey callback:^(ZFWKWebVC * _Nonnull target, id  _Nullable body) {
+        [userConf addMethodName:ZFWKWebViewEventCloseKey callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, id  _Nullable body) {
             NSLog(@"ZFWKWebViewEventCloseKey");
         }];
-        [userConf addMethodName:ZFWKWebViewEventRefreshKey callback:^(ZFWKWebVC * _Nonnull target, id  _Nullable body) {
+        [userConf addMethodName:ZFWKWebViewEventRefreshKey callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, id  _Nullable body) {
             NSLog(@"ZFWKWebViewEventRefreshKey");
         }];
         

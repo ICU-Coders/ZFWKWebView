@@ -242,8 +242,7 @@ static inline BOOL isIPhoneXSeries() {
     int scrollJudgeDistance;
 }
 
-@property (nonatomic, strong) ZFWKWebVCConf *conf;
-
+@property (nonatomic, strong, readwrite) ZFWKWebVCConf *config;
 @property (nonatomic, strong, readwrite) WKWebView *webView;
 @property (nonatomic, strong) UIView *navView;
 @property (nonatomic, strong) UIButton *closeButton;
@@ -252,6 +251,7 @@ static inline BOOL isIPhoneXSeries() {
 @property (nonatomic, strong) UIProgressView *progressView;
 @property (nonatomic, strong) UILabel *originLabel;
 @property (nonatomic, strong) ZFWKWebVCLoadFailedView *loadFailedView;
+
 @end
 
 @implementation ZFWKWebVC
@@ -273,7 +273,7 @@ static inline BOOL isIPhoneXSeries() {
         [self.webView.scrollView removeObserver:self forKeyPath:@"contentOffset" context:@"ZFContext"];
         
         for (NSString *path in [self configObservePaths]) {
-            [self.conf removeObserver:self forKeyPath:path context:@"ZFWKConfig"];
+            [self.config removeObserver:self forKeyPath:path context:@"ZFWKConfig"];
         }
     }
     
@@ -285,7 +285,7 @@ static inline BOOL isIPhoneXSeries() {
 - (instancetype)initWithConf:(ZFWKWebVCConf *)conf {
     self = [super init];
     if (self) {
-        _conf = conf;
+        _config = conf;
         lastPostion = 0;
         scrollJudgeDistance = 100;
         self.webView = ({
@@ -304,20 +304,20 @@ static inline BOOL isIPhoneXSeries() {
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    for (NSString *methodName in self.conf.callbacks.allKeys) {
+    for (NSString *methodName in self.config.callbacks.allKeys) {
         [self.webView.configuration.userContentController addScriptMessageHandler:self name:methodName];
     }
 }
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    for (NSString *name in self.conf.callbacks.allKeys) {
+    for (NSString *name in self.config.callbacks.allKeys) {
         [self.webView.configuration.userContentController removeScriptMessageHandlerForName:name];
     }
-    [self.conf.callbacks removeAllObjects];
+    [self.config.callbacks removeAllObjects];
 }
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    self.conf = nil;
+    self.config = nil;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -369,7 +369,7 @@ static inline BOOL isIPhoneXSeries() {
     });
     [self.webView insertSubview:self.originLabel belowSubview:self.webView.scrollView];
     
-    if (self.conf.showBottomBar) {
+    if (self.config.showBottomBar) {
         self.bottomBar = ({
             ZFWKWebVCBottomBar *bar = [[ZFWKWebVCBottomBar alloc] initWithFrame:CGRectMake(0, ZF_SCREEN_HEIGHT, ZF_SCREEN_WIDTH, 44)];
             [bar.backButton addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
@@ -395,12 +395,12 @@ static inline BOOL isIPhoneXSeries() {
         [self.webView.scrollView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:@"ZFContext"];
         
         for (NSString *path in [self configObservePaths]) {
-            [self.conf addObserver:self forKeyPath:path options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionInitial context:@"ZFWKConfig"];
+            [self.config addObserver:self forKeyPath:path options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionInitial context:@"ZFWKConfig"];
         }
     }
  
     self.loadFailedView = [[ZFWKWebVCLoadFailedView alloc] initWithFrame:CGRectZero];
-    self.loadFailedView.imageView.image = self.conf.refreshButtonImage;
+    self.loadFailedView.imageView.image = self.config.refreshButtonImage;
     [self.loadFailedView.hoverButton addTarget:self action:@selector(refresh) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.loadFailedView];
 }
@@ -420,11 +420,11 @@ static inline BOOL isIPhoneXSeries() {
             self.titleLabel.text = (NSString *)value;
         } else if ([keyPath isEqualToString:@"canGoBack"]) {
             BOOL canGoBack =  [value boolValue];
-            self.conf.canGoBack = canGoBack;
+            self.config.canGoBack = canGoBack;
             self.bottomBar.backButton.enabled = canGoBack;
         } else if ([keyPath isEqualToString:@"canGoForward"]) {
             BOOL canGoForward =  [value boolValue];
-            self.conf.canGoForward = canGoForward;
+            self.config.canGoForward = canGoForward;
             self.bottomBar.forwardButton.enabled = canGoForward;
         } else if ([keyPath isEqualToString:@"estimatedProgress"]) {
             double progress = [value doubleValue];
@@ -443,7 +443,7 @@ static inline BOOL isIPhoneXSeries() {
             if (currentPostion < -40) {
                 self.originLabel.alpha = fabsf(currentPostion + 40) / 40;
             }
-            BOOL canGoBool = self.conf.canGoForward || self.conf.canGoBack;
+            BOOL canGoBool = self.config.canGoForward || self.config.canGoBack;
             if (currentPostion - lastPostion > scrollJudgeDistance)  {
                 lastPostion = currentPostion;
                 [self bottomBarHidden:YES];
@@ -462,15 +462,15 @@ static inline BOOL isIPhoneXSeries() {
         } else if ([keyPath isEqualToString:@"progressBackgroundColor"]) {
             [self.progressView setTrackTintColor:(UIColor *)value];
         } else if ([keyPath isEqualToString:@"closeButtonImage"]) {
-            [self.closeButton setImage:self.conf.closeButtonImage forState:UIControlStateNormal];
+            [self.closeButton setImage:self.config.closeButtonImage forState:UIControlStateNormal];
         } else if ([keyPath isEqualToString:@"goBackButtonNomalImage"]) {
-            if (self.conf.showBottomBar) [self.bottomBar.backButton setImage:(UIImage *)value forState:UIControlStateNormal];
+            if (self.config.showBottomBar) [self.bottomBar.backButton setImage:(UIImage *)value forState:UIControlStateNormal];
         } else if ([keyPath isEqualToString:@"goBackButtonDisableImage"]) {
-            if (self.conf.showBottomBar) [self.bottomBar.backButton setImage:(UIImage *)value forState:UIControlStateDisabled];
+            if (self.config.showBottomBar) [self.bottomBar.backButton setImage:(UIImage *)value forState:UIControlStateDisabled];
         } else if ([keyPath isEqualToString:@"goForwardButtonNomalImage"]) {
-            if (self.conf.showBottomBar) [self.bottomBar.forwardButton setImage:(UIImage *)value forState:UIControlStateNormal];
+            if (self.config.showBottomBar) [self.bottomBar.forwardButton setImage:(UIImage *)value forState:UIControlStateNormal];
         } else if ([keyPath isEqualToString:@"goForwardButtonDisableImage"]) {
-            if (self.conf.showBottomBar) [self.bottomBar.forwardButton setImage:(UIImage *)value forState:UIControlStateDisabled];
+            if (self.config.showBottomBar) [self.bottomBar.forwardButton setImage:(UIImage *)value forState:UIControlStateDisabled];
         } else if ([keyPath isEqualToString:@"titleColor"]) {
             self.titleLabel.textColor = (UIColor *)value;
         } else if ([keyPath isEqualToString:@"titleFont"]) {
@@ -478,19 +478,19 @@ static inline BOOL isIPhoneXSeries() {
         } else if ([keyPath isEqualToString:@"showRightNavigationButton"]) {
             self.navigationRightButon.hidden = ![value boolValue];
         } else if ([keyPath isEqualToString:@"rightNavigationButtonNomalImage"]) {
-            if (self.conf.showRightNavigationButton) [self.navigationRightButon setImage:(UIImage *)value forState:UIControlStateNormal];
+            if (self.config.showRightNavigationButton) [self.navigationRightButon setImage:(UIImage *)value forState:UIControlStateNormal];
         } else if ([keyPath isEqualToString:@"rightNavigationButtonTitle"]) {
-            if (self.conf.showRightNavigationButton) [self.navigationRightButon setTitle:(NSString *)value forState:UIControlStateNormal];
+            if (self.config.showRightNavigationButton) [self.navigationRightButon setTitle:(NSString *)value forState:UIControlStateNormal];
         } else if ([keyPath isEqualToString:@"rightNavigationButtonTextColor"]) {
-            if (self.conf.showRightNavigationButton) [self.navigationRightButon setTitleColor:(UIColor *)value forState:UIControlStateNormal];
+            if (self.config.showRightNavigationButton) [self.navigationRightButon setTitleColor:(UIColor *)value forState:UIControlStateNormal];
         } else if ([keyPath isEqualToString:@"rightNavigationButtonTextFont"]) {
-            if (self.conf.showRightNavigationButton) self.navigationRightButon.titleLabel.font = (UIFont *)value;
+            if (self.config.showRightNavigationButton) self.navigationRightButon.titleLabel.font = (UIFont *)value;
         } else if ([keyPath isEqualToString:@"openUrl"]) {
             if (!value) return;
             if ([self.webView isLoading]) [self.webView stopLoading];
             NSString *urlStr = [(NSString *)value stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
             NSURL *url = [NSURL URLWithString:urlStr];
-            NSURLRequest *req = [[NSURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:self.conf.timeoutDuration];
+            NSURLRequest *req = [[NSURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:self.config.timeoutDuration];
             [self.webView loadRequest:req];
         }
         
@@ -514,7 +514,7 @@ static inline BOOL isIPhoneXSeries() {
         float titleLabelWidth = 300;
         float rightButtonW = 80;
         [self.titleLabel setFrame:CGRectMake((ZF_SCREEN_WIDTH - titleLabelWidth) * 0.5, navHeight - btnW, titleLabelWidth, btnW)];
-        [self.progressView setFrame:CGRectMake(0, navHeight - self.conf.progressBarHeight, ZF_SCREEN_WIDTH, self.conf.progressBarHeight)];
+        [self.progressView setFrame:CGRectMake(0, navHeight - self.config.progressBarHeight, ZF_SCREEN_WIDTH, self.config.progressBarHeight)];
         [self.navigationRightButon setFrame:CGRectMake(ZF_SCREEN_WIDTH - nomalMargin - rightButtonW, navHeight - btnW, rightButtonW, btnW)];
     }
     y += navHeight;
@@ -524,7 +524,7 @@ static inline BOOL isIPhoneXSeries() {
 }
 
 - (void)bottomBarHidden:(BOOL)flag {
-    if (!self.conf.showBottomBar) return;
+    if (!self.config.showBottomBar) return;
     float barH = 44;
     if (isIPhoneXSeries()) {
         if (@available(iOS 11.0, *)) {
@@ -539,30 +539,30 @@ static inline BOOL isIPhoneXSeries() {
 }
 
 - (void)rightButtonClick:(UIButton *)button {
-    zf_wkWebViewEventCallBack callback = self.conf.callbacks[ZFWKWebViewEventRightButtonClickKey];
-    if (callback) callback(self, button);
+    zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventRightButtonClickKey];
+    if (callback) callback(self, self.config, button);
 }
 
 - (void)refresh {
-    zf_wkWebViewEventCallBack callback = self.conf.callbacks[ZFWKWebViewEventRefreshKey];
-    if (callback) callback(self, nil);
+    zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventRefreshKey];
+    if (callback) callback(self, self.config, nil);
     [self.webView stopLoading];
     [self.webView reload];
 }
 - (void)goBack {
     if ([self.webView canGoBack]) [self.webView goBack];
-    zf_wkWebViewEventCallBack callback = self.conf.callbacks[ZFWKWebViewEventGoBackKey];
-    if (callback) callback(self, nil);
+    zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventGoBackKey];
+    if (callback) callback(self, self.config, nil);
 }
 
 - (void)goForward {
     if ([self.webView canGoForward]) [self.webView goForward];
-    zf_wkWebViewEventCallBack callback = self.conf.callbacks[ZFWKWebViewEventGoForwardKey];
-    if (callback) callback(self, nil);
+    zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventGoForwardKey];
+    if (callback) callback(self, self.config, nil);
 }
 
 - (void)close {
-    if (self.conf.closeButtonGobackFirst) {
+    if (self.config.closeButtonGobackFirst) {
         if ([self.webView canGoBack]) {
             [self.webView goBack];
         } else {
@@ -574,11 +574,11 @@ static inline BOOL isIPhoneXSeries() {
 }
 
 - (void)closeVC {
-    zf_wkWebViewEventCallBack callback = self.conf.callbacks[ZFWKWebViewEventCloseKey];
-    if (callback) callback(self, nil);
+    zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventCloseKey];
+    if (callback) callback(self, self.config, nil);
     
     if (self.navigationController.topViewController == self) {
-        switch (self.conf.popType) {
+        switch (self.config.popType) {
             case ZFWKWebVCPopTypeRoot:
                 [self.navigationController popToRootViewControllerAnimated:YES];
                 break;
@@ -614,9 +614,9 @@ static inline BOOL isIPhoneXSeries() {
 
 
 - (void)removeUserScript:(NSString *)script {
-    zf_wkWebViewEventCallBack callback = self.conf.callbacks[script];
+    zf_wkWebViewEventCallBack callback = self.config.callbacks[script];
     if (callback) {
-        [self.conf.callbacks removeObjectForKey:script];
+        [self.config.callbacks removeObjectForKey:script];
     }
     [self.webView.configuration.userContentController removeScriptMessageHandlerForName:script];
 }
@@ -630,7 +630,7 @@ static inline BOOL isIPhoneXSeries() {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:message preferredStyle:UIAlertControllerStyleAlert];
     [alertController addAction:[UIAlertAction actionWithTitle:@"确认" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) { completionHandler();
     }]];
-    if (self.conf) {
+    if (self.config) {
         [self presentViewController:alertController animated:YES completion:^{}];
     } else {
         completionHandler();
@@ -639,19 +639,19 @@ static inline BOOL isIPhoneXSeries() {
 }
 // 页面开始加载时调
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(WKNavigation *)navigation {
-    zf_wkWebViewEventCallBack callback = self.conf.callbacks[ZFWKWebViewEventStartLoadKey];
-    if (callback) callback(self, nil);
+    zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventStartLoadKey];
+    if (callback) callback(self, self.config, nil);
 }
 // 当内容开始返回时调用
 - (void)webView:(WKWebView *)webView didCommitNavigation:(WKNavigation *)navigation {
-    zf_wkWebViewEventCallBack callback = self.conf.callbacks[ZFWKWebViewEventStartRecevicedKey];
-    if (callback) callback(self, nil);
+    zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventStartRecevicedKey];
+    if (callback) callback(self, self.config, nil);
     self.loadFailedView.hidden = YES;
 }
 // 页面加载完成之后调用
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
-    zf_wkWebViewEventCallBack callback = self.conf.callbacks[ZFWKWebViewEventFinishRecevicedKey];
-    if (callback) callback(self, nil);
+    zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventFinishRecevicedKey];
+    if (callback) callback(self, self.config, nil);
 }
 // 页面加载失败时调用
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error {
@@ -666,8 +666,8 @@ static inline BOOL isIPhoneXSeries() {
 - (void)showError:(NSError *)error {
     if (!error) return;
     
-    zf_wkWebViewEventCallBack callback = self.conf.callbacks[ZFWKWebViewEventLoadFailedKey];
-    if (callback) callback(self, error);
+    zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventLoadFailedKey];
+    if (callback) callback(self, self.config, error);
     
 //    NSLog(@"%s: %@ %@ %@", __func__, error.localizedDescription, error.localizedFailureReason, error.localizedRecoverySuggestion);
 //        if (error.code == NSURLErrorCancelled) {
@@ -694,16 +694,16 @@ static inline BOOL isIPhoneXSeries() {
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message {
     NSLog(@"%s: %@", __func__, message.name);
     if (!message.name) return;
-    zf_wkWebViewEventCallBack callback = self.conf.callbacks[message.name];
+    zf_wkWebViewEventCallBack callback = self.config.callbacks[message.name];
     if (!callback) return;
     NSString *jsonStr = message.body;
     NSData *data = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
     NSError *err;
     id tempBody = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&err];
     if (!err) {
-        callback(self, tempBody);
+        callback(self, self.config, tempBody);
     } else {
-        callback(self, message.body);
+        callback(self, self.config, message.body);
     }
 }
 

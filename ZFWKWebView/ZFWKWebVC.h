@@ -15,7 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ZFWKWebVCTipsView : UIView @end
 
 @class ZFWKWebVC;
-typedef void(^zf_wkWebViewEventCallBack)(ZFWKWebVC *target, id _Nullable body);
+@class ZFWKWebVCConf;
+typedef void(^zf_wkWebViewEventCallBack)(ZFWKWebVC *target, ZFWKWebVCConf *config, id _Nullable body);
 
 typedef NS_ENUM(NSUInteger, ZFWKWebVCPopType) {
     ZFWKWebVCPopTypePervious,
@@ -96,6 +97,7 @@ UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventGoForwardKey;
 
 @property (nonatomic, strong, readonly) WKWebView *webView;
 @property (nonatomic, strong, nullable) ZFWKWebVCBottomBar *bottomBar;
+@property (nonatomic, strong, readonly) ZFWKWebVCConf *config;
 
 
 @end
