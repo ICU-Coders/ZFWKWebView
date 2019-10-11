@@ -13,11 +13,15 @@
 {
     self = [super init];
     if (self) {
-        self.progressTintColor = [UIColor redColor];
-        self.progressBackgroundColor = [UIColor blackColor];
         self.showRightNavigationButton = YES;
         self.rightNavigationButtonTitle = @"跳过";
-        [self addMethodName:@"test" callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, id  _Nullable body) {
+        self.showBottomBar = NO;
+        self.closeButtonGobackFirst = YES;
+        
+        [self addMethodName:@"formPost" callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, NSDictionary  *_Nullable body) {
+            NSString *callback = body[@"callback"];
+            [target evaluateJavaScriptMethodName:callback params:@{@"test": @"test"} callback:nil];
+            NSLog(@"formPost %@", body);
             
         }];
     }

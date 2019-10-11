@@ -47,28 +47,12 @@
 - (void)buttonClicked:(UIButton *)button {
     if (button.tag == 1) {
         ZFWKUserDefaultConf *userConf = [[ZFWKUserDefaultConf alloc] init];
-        [userConf addMethodName:ZFWKWebViewEventStartLoadKey callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, id  _Nullable body) {
-            [self temp];
-        }];
-        [userConf addMethodName:ZFWKWebViewEventLoadFailedKey callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, id  _Nullable body) {
-            NSLog(@"ZFWKWebViewEventLoadFailedKey");
-        }];
-        [userConf addMethodName:ZFWKWebViewEventFinishRecevicedKey callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, id  _Nullable body) {
-            NSLog(@"ZFWKWebViewEventFinishRecevicedKey");
-        }];
-        [userConf addMethodName:ZFWKWebViewEventStartRecevicedKey callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, id  _Nullable body) {
-            NSLog(@"ZFWKWebViewEventStartRecevicedKey");
-        }];
-        [userConf addMethodName:ZFWKWebViewEventCloseKey callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, id  _Nullable body) {
-            NSLog(@"ZFWKWebViewEventCloseKey");
-        }];
-        [userConf addMethodName:ZFWKWebViewEventRefreshKey callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, id  _Nullable body) {
-            NSLog(@"ZFWKWebViewEventRefreshKey");
-        }];
-        
-        userConf.openUrl = @"https://www.ba";
+        userConf.openUrl = @"http://10.10.40.32:9999/";
+        // http://10.10.40.32:9999/
+        // http://10.10.40.32:9999/car-select.html?isFirst=1
         ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithConf:userConf];
-        [self presentViewController:web animated:YES completion:nil];
+        [self.navigationController pushViewController:web animated:YES];
+//        [self presentViewController:web animated:YES completion:nil];
     } else {
         ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithDefaultConfig];
         [web.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://www.apple.com.cn"]]];

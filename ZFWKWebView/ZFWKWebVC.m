@@ -118,6 +118,7 @@ static inline BOOL isIPhoneXSeries() {
 {
     self = [super initWithFrame:frame];
     if (self) {
+        [self setBackgroundColor:[UIColor whiteColor]];
         self.imageView = ({
             UIImageView *imageView = [[UIImageView alloc] init];
             imageView;
@@ -233,6 +234,7 @@ static inline BOOL isIPhoneXSeries() {
 }
 - (void)addMethodName:(NSString *)name callback:(zf_wkWebViewEventCallBack)callback {
     if (callback) self.callbacks[name] = callback;
+    
 }
 
 @end
@@ -290,6 +292,7 @@ static inline BOOL isIPhoneXSeries() {
         scrollJudgeDistance = 100;
         self.webView = ({
             WKWebViewConfiguration *webViewConf = [[WKWebViewConfiguration alloc] init];
+//            [webViewConf.userContentController addScriptMessageHandler:self name:@"notify"];
             WKWebView *webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:webViewConf];
             webView.navigationDelegate = self;
             webView.UIDelegate = self;
@@ -302,21 +305,28 @@ static inline BOOL isIPhoneXSeries() {
     return self;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+- (void)addJS {
+    [self.webView.configuration.userContentController removeAllUserScripts];
     for (NSString *methodName in self.config.callbacks.allKeys) {
         [self.webView.configuration.userContentController addScriptMessageHandler:self name:methodName];
     }
 }
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
+- (void)removeJS {
     for (NSString *name in self.config.callbacks.allKeys) {
         [self.webView.configuration.userContentController removeScriptMessageHandlerForName:name];
     }
-    [self.config.callbacks removeAllObjects];
+}
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self addJS];
+}
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self removeJS];
 }
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+    [self.config.callbacks removeAllObjects];
     self.config = nil;
 }
 - (void)viewDidLoad {
@@ -409,7 +419,7 @@ static inline BOOL isIPhoneXSeries() {
     id value = change[NSKeyValueChangeNewKey];
     id oldValue = change[NSKeyValueChangeOldKey];
     if ([value isKindOfClass:[NSNull class]]) {
-        NSLog(@"ObserveValueForKeyPath:%@ is null", keyPath);
+//        NSLog(@"ObserveValueForKeyPath:%@ is null", keyPath);
         value = nil;
     }
     if ([oldValue isKindOfClass:[NSNull class]]) {
@@ -696,15 +706,22 @@ static inline BOOL isIPhoneXSeries() {
     if (!message.name) return;
     zf_wkWebViewEventCallBack callback = self.config.callbacks[message.name];
     if (!callback) return;
-    NSString *jsonStr = message.body;
-    NSData *data = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
-    NSError *err;
-    id tempBody = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&err];
-    if (!err) {
-        callback(self, self.config, tempBody);
-    } else {
+    
+    if ([message.body isKindOfClass:[NSDictionary class]]) {
         callback(self, self.config, message.body);
+    } else if ([message.body isKindOfClass:[NSString class]]) {
+        NSString *jsonStr = message.body;
+        NSData *data = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
+        NSError *err;
+        id tempBody = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&err];
+        if (!err) {
+            callback(self, self.config, tempBody);
+        } else {
+            callback(self, self.config, message.body);
+        }
     }
+    
+    
 }
 
 @end
