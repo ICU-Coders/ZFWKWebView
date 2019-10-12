@@ -47,7 +47,7 @@
 - (void)buttonClicked:(UIButton *)button {
     if (button.tag == 1) {
         ZFWKUserDefaultConf *userConf = [[ZFWKUserDefaultConf alloc] init];
-        userConf.openUrl = @"http://10.10.40.32:9999/";
+        userConf.openUrl = @"https://www.baidu.com/";
         // http://10.10.40.32:9999/
         // http://10.10.40.32:9999/car-select.html?isFirst=1
         ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithConf:userConf];

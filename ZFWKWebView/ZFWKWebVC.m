@@ -208,7 +208,9 @@ static inline BOOL isIPhoneXSeries() {
         _timeoutDuration = 15;
         _progressTintColor = [UIColor colorWithRed:86/255.0 green:187/255.0 blue:59/255.0 alpha:1];
         _progressBackgroundColor = [UIColor clearColor];
-        _showBottomBar = YES;
+        _showBottomBar = NO;
+        _closeButtonGobackFirst = YES;
+        _showCloseButton = YES;
         _callbacks = [NSMutableDictionary dictionaryWithCapacity:100];
         _progressBarHeight = 2.5;
         
@@ -217,6 +219,7 @@ static inline BOOL isIPhoneXSeries() {
         NSBundle *imageBundle = [NSBundle bundleWithURL:url];
         
         
+        _backButtonImage = [UIImage imageNamed:@"BackButtonIcon" inBundle:imageBundle compatibleWithTraitCollection:nil];
         _closeButtonImage = [UIImage imageNamed:@"CloseButtonIcon" inBundle:imageBundle compatibleWithTraitCollection:nil];
         _goBackButtonNomalImage = [UIImage imageNamed:@"BackButtonIcon" inBundle:imageBundle compatibleWithTraitCollection:nil];
         _goBackButtonDisableImage =[UIImage imageNamed:@"BackButtonIconUnable" inBundle:imageBundle compatibleWithTraitCollection:nil];
@@ -247,6 +250,7 @@ static inline BOOL isIPhoneXSeries() {
 @property (nonatomic, strong, readwrite) ZFWKWebVCConf *config;
 @property (nonatomic, strong, readwrite) WKWebView *webView;
 @property (nonatomic, strong) UIView *navView;
+@property (nonatomic, strong) UIButton *backButton;
 @property (nonatomic, strong) UIButton *closeButton;
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIButton *navigationRightButon;
@@ -263,7 +267,7 @@ static inline BOOL isIPhoneXSeries() {
 }
 
 - (NSArray *)configObservePaths {
-    return @[@"showBottomBar", @"progressBarHeight", @"closeButtonImage", @"goBackButtonNomalImage", @"goBackButtonDisableImage", @"goForwardButtonNomalImage", @"goForwardButtonDisableImage", @"titleColor", @"titleFont", @"rightNavigationButtonNomalImage", @"showRightNavigationButton", @"rightNavigationButtonTitle", @"rightNavigationButtonTextColor", @"rightNavigationButtonTextFont", @"progressBackgroundColor", @"progressTintColor", @"openUrl"];
+    return @[@"showBottomBar", @"progressBarHeight",@"backButtonImage", @"closeButtonImage",@"showCloseButton", @"goBackButtonNomalImage", @"goBackButtonDisableImage", @"goForwardButtonNomalImage", @"goForwardButtonDisableImage", @"titleColor", @"titleFont", @"rightNavigationButtonNomalImage", @"showRightNavigationButton", @"rightNavigationButtonTitle", @"rightNavigationButtonTextColor", @"rightNavigationButtonTextFont", @"progressBackgroundColor", @"progressTintColor", @"openUrl"];
 }
 
 - (void)dealloc {
@@ -336,12 +340,20 @@ static inline BOOL isIPhoneXSeries() {
     UIView *navView = ({
         UIView *view = [[UIView alloc] init];
         [view setBackgroundColor:ZF_WK_BACKGROUD_COLOR];
-        self.closeButton = ({
+        self.backButton = ({
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
             [button addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
             button;
         });
+        [view addSubview:self.backButton];
+        
+        self.closeButton = ({
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            [button addTarget:self action:@selector(closeVC) forControlEvents:UIControlEventTouchUpInside];
+            button;
+        });
         [view addSubview:self.closeButton];
+        
         self.titleLabel = ({
             UILabel *label = [[UILabel alloc] init];
             label.textAlignment = NSTextAlignmentCenter;
@@ -432,6 +444,7 @@ static inline BOOL isIPhoneXSeries() {
             BOOL canGoBack =  [value boolValue];
             self.config.canGoBack = canGoBack;
             self.bottomBar.backButton.enabled = canGoBack;
+            if (self.config.showCloseButton) self.closeButton.hidden = !canGoBack;
         } else if ([keyPath isEqualToString:@"canGoForward"]) {
             BOOL canGoForward =  [value boolValue];
             self.config.canGoForward = canGoForward;
@@ -472,7 +485,9 @@ static inline BOOL isIPhoneXSeries() {
         } else if ([keyPath isEqualToString:@"progressBackgroundColor"]) {
             [self.progressView setTrackTintColor:(UIColor *)value];
         } else if ([keyPath isEqualToString:@"closeButtonImage"]) {
-            [self.closeButton setImage:self.config.closeButtonImage forState:UIControlStateNormal];
+            [self.closeButton setImage:(UIImage *)value forState:UIControlStateNormal];
+        }  else if ([keyPath isEqualToString:@"backButtonImage"]) {
+           [self.backButton setImage:(UIImage *)value forState:UIControlStateNormal];
         } else if ([keyPath isEqualToString:@"goBackButtonNomalImage"]) {
             if (self.config.showBottomBar) [self.bottomBar.backButton setImage:(UIImage *)value forState:UIControlStateNormal];
         } else if ([keyPath isEqualToString:@"goBackButtonDisableImage"]) {
@@ -502,6 +517,8 @@ static inline BOOL isIPhoneXSeries() {
             NSURL *url = [NSURL URLWithString:urlStr];
             NSURLRequest *req = [[NSURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:self.config.timeoutDuration];
             [self.webView loadRequest:req];
+        } else if ([keyPath isEqualToString:@"showCloseButton"]) {
+            self.closeButton.hidden = !([value boolValue] && self.webView.canGoBack);
         }
         
     }
@@ -519,13 +536,14 @@ static inline BOOL isIPhoneXSeries() {
     [self.navView setFrame:CGRectMake(0, 0, ZF_SCREEN_WIDTH, navHeight)];
     {
         float btnW = 44;
-        float nomalMargin = 10;
-        [self.closeButton setFrame:CGRectMake(nomalMargin, navHeight - btnW, btnW, btnW)];
+        float nomalMargin = 0;
+        [self.backButton setFrame:CGRectMake(nomalMargin, navHeight - btnW, btnW, btnW)];
+        [self.closeButton setFrame:CGRectMake(nomalMargin + btnW + nomalMargin, navHeight - btnW, btnW, btnW)];
         float titleLabelWidth = 300;
         float rightButtonW = 80;
         [self.titleLabel setFrame:CGRectMake((ZF_SCREEN_WIDTH - titleLabelWidth) * 0.5, navHeight - btnW, titleLabelWidth, btnW)];
         [self.progressView setFrame:CGRectMake(0, navHeight - self.config.progressBarHeight, ZF_SCREEN_WIDTH, self.config.progressBarHeight)];
-        [self.navigationRightButon setFrame:CGRectMake(ZF_SCREEN_WIDTH - nomalMargin - rightButtonW, navHeight - btnW, rightButtonW, btnW)];
+        [self.navigationRightButon setFrame:CGRectMake(ZF_SCREEN_WIDTH - 10 - rightButtonW, navHeight - btnW, rightButtonW, btnW)];
     }
     y += navHeight;
     [self.webView setFrame:CGRectMake(0, y, ZF_SCREEN_WIDTH, ZF_SCREEN_HEIGHT - y)];

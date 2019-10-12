@@ -22,9 +22,9 @@
             NSString *callback = body[@"callback"];
             [target evaluateJavaScriptMethodName:callback params:@{@"test": @"test"} callback:nil];
             NSLog(@"formPost %@", body);
-            
         }];
     }
     return self;
 }
+
 @end
