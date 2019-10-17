@@ -47,14 +47,12 @@
 - (void)buttonClicked:(UIButton *)button {
     if (button.tag == 1) {
         ZFWKUserDefaultConf *userConf = [[ZFWKUserDefaultConf alloc] init];
-        userConf.openUrl = @"https://www.baidu.com/";
-        // http://10.10.40.32:9999/
-        // http://10.10.40.32:9999/car-select.html?isFirst=1
+//        userConf.openUrl = @"https://www.baidu.com/";
+        userConf.openUrl = @"http://8.8.8.8:8888/";
+        userConf.timeoutDuration = 2;
         ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithConf:userConf];
         [self.navigationController pushViewController:web animated:YES];
-        [web evaluateJavaScriptMethodName:@"" params:nil callback:^(id  _Nullable body, NSError * _Nullable error) {
-            
-        }];
+
     } else {
         ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithDefaultConfig];
         [web.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://www.apple.com.cn"]]];

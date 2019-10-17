@@ -187,6 +187,7 @@ static inline BOOL isIPhoneXSeries() {
 @property (nonatomic, strong) UIProgressView *progressView;
 @property (nonatomic, strong) UILabel *originLabel;
 @property (nonatomic, strong) ZFWKWebVCLoadFailedView *loadFailedView;
+@property (nonatomic, strong) NSURL *previousURL;
 
 @end
 
@@ -383,7 +384,12 @@ static inline BOOL isIPhoneXSeries() {
             self.progressView.progress = progress;
             self.progressView.hidden = progress >= 1.0;
         } else if ([keyPath isEqualToString:@"URL"]) {
-            if (value) self.originLabel.text = [NSString stringWithFormat:@"此网页由%@提供", ((NSURL *)value).host];
+            if (value) {
+                self.originLabel.text = [NSString stringWithFormat:@"此网页由%@提供", ((NSURL *)value).host];
+                self.previousURL = value;
+            } else {
+                self.previousURL = oldValue;
+            }
             if (!value && !oldValue) {
                 [(WKWebView *)object reload];
             }
@@ -501,10 +507,12 @@ static inline BOOL isIPhoneXSeries() {
 }
 
 - (void)refresh {
+    self.titleLabel.text = @"加载中...";
     zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventRefreshKey];
     if (callback) callback(self, self.config, nil);
     [self.webView stopLoading];
-    [self.webView reload];
+    NSURLRequest *req = [[NSURLRequest alloc] initWithURL:self.previousURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:self.config.timeoutDuration];
+    [self.webView loadRequest:req];
 }
 - (void)goBack {
     if ([self.webView canGoBack]) [self.webView goBack];
