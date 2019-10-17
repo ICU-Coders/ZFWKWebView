@@ -1,4 +1,11 @@
- ZFWKWebView is a Highly customizable WKWebView for iOS.
+
+<p align="center" >
+  <img src="https://github.com/FranLucky/IconLib/blob/master/icon.png?raw=true" alt="ZFWKWebView" title="ZFWKWebView">
+</p>
+
+![podversion](https://img.shields.io/cocoapods/v/ZFWKWebView.svg)
+
+ZFWKWebView is a Highly customizable WKWebView for iOS.
  Choose ZFWKWebView for your next project, or migrate over your existing projects—you'll be happy you did!
 
 ### Installation with CocoaPods
