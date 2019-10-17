@@ -17,12 +17,19 @@
         self.rightNavigationButtonTitle = @"跳过";
         self.showBottomBar = NO;
         self.closeButtonGobackFirst = YES;
-        
+        [self addMethodName:ZFWKWebViewEventCloseKey callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, id  _Nullable body) {
+            
+        }];
         [self addMethodName:@"formPost" callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, NSDictionary  *_Nullable body) {
             NSString *callback = body[@"callback"];
             [target evaluateJavaScriptMethodName:callback params:@{@"test": @"test"} callback:nil];
             NSLog(@"formPost %@", body);
+            
+            [target evaluateJavaScriptMethodName:@"test" params:@{} callback:^(id _Nullable, NSError * _Nullable error) {
+                
+            }];
         }];
+        
     }
     return self;
 }
