@@ -52,7 +52,9 @@
         // http://10.10.40.32:9999/car-select.html?isFirst=1
         ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithConf:userConf];
         [self.navigationController pushViewController:web animated:YES];
-//        [self presentViewController:web animated:YES completion:nil];
+        [web evaluateJavaScriptMethodName:@"" params:nil callback:^(id  _Nullable body, NSError * _Nullable error) {
+            
+        }];
     } else {
         ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithDefaultConfig];
         [web.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://www.apple.com.cn"]]];

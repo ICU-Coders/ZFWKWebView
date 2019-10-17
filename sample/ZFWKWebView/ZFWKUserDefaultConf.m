@@ -24,8 +24,7 @@
             NSString *callback = body[@"callback"];
             [target evaluateJavaScriptMethodName:callback params:@{@"test": @"test"} callback:nil];
             NSLog(@"formPost %@", body);
-            
-            [target evaluateJavaScriptMethodName:@"test" params:@{} callback:^(id _Nullable, NSError * _Nullable error) {
+            [target evaluateJavaScriptMethodName:@"" params:nil callback:^(id  _Nullable body, NSError * _Nullable error) {
                 
             }];
         }];

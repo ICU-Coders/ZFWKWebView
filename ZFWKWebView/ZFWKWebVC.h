@@ -12,10 +12,10 @@
 NS_ASSUME_NONNULL_BEGIN
 @interface ZFWKWebVCLoadFailedView : UIView @end
 @interface ZFWKWebVCBottomBar : UIView @end
-@interface ZFWKWebVCTipsView : UIView @end
 
 @class ZFWKWebVC;
 @class ZFWKWebVCConf;
+
 typedef void(^zf_wkWebViewEventCallBack)(ZFWKWebVC *target, ZFWKWebVCConf *config, id _Nullable body);
 
 typedef NS_ENUM(NSUInteger, ZFWKWebVCPopType) {
@@ -36,50 +36,49 @@ UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventGoBackKey;
 UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventGoForwardKey;
 
 @interface ZFWKWebVCConf : NSObject
+/**
+ *  ZFWKWebVCPopTypePervious => popViewControllerAnimated (default)
+ *  ZFWKWebVCPopTypeRoot => popToRootViewControllerAnimated
+ */
 @property(nonatomic, assign) ZFWKWebVCPopType popType;
 
 @property(nonatomic, copy) NSString *openUrl;
 
 @property(nonatomic, assign) int timeoutDuration; // default 15s
+@property(nonatomic, assign) float progressBarHeight; // default 2.5
+
+@property (nonatomic, strong) UIColor *progressBackgroundColor; // [UIColor clearColor]
+@property (nonatomic, strong) UIColor *progressTintColor; // [UIColor colorWithRed:86/255.0 green:187/255.0 blue:59/255.0 alpha:1]
+@property (nonatomic, strong) UIColor *titleColor;
+@property (nonatomic, strong) UIColor *rightNavigationButtonTextColor;
+
+@property (nonatomic, strong) UIImage *backButtonImage;
+@property (nonatomic, strong) UIImage *closeButtonImage;
+@property (nonatomic, strong) UIImage *goBackButtonNomalImage;
+@property (nonatomic, strong) UIImage *goBackButtonDisableImage;
+@property (nonatomic, strong) UIImage *goForwardButtonNomalImage;
+@property (nonatomic, strong) UIImage *goForwardButtonDisableImage;
+@property (nonatomic, strong) UIImage *refreshButtonImage;
+@property (nonatomic, strong) UIImage *rightNavigationButtonNomalImage;
+@property (nonatomic, strong) UIImage *rightNavigationButtonDisableImage;
 
 @property(nonatomic, assign) BOOL showBottomBar; // default NO
+@property(nonatomic, assign) BOOL showCloseButton;
+@property(nonatomic, assign) BOOL showRightNavigationButton; // defult NO
 
-@property(nonatomic, assign) float progressBarHeight; // KVO default 2.5
-@property (nonatomic, strong) UIColor *progressBackgroundColor; // KVO [UIColor clearColor]
-@property (nonatomic, strong) UIColor *progressTintColor; // KVO [UIColor colorWithRed:86/255.0 green:187/255.0 blue:59/255.0 alpha:1]
+@property(nonatomic, copy) NSString *rightNavigationButtonTitle;
 
-@property (nonatomic, strong) UIImage *backButtonImage; // KVO
-@property (nonatomic, strong) UIImage *closeButtonImage; // KVO
-@property(nonatomic, assign) BOOL showCloseButton; // KVO
-
-
-@property (nonatomic, strong) UIImage *goBackButtonNomalImage; // KVO
-@property (nonatomic, strong) UIImage *goBackButtonDisableImage; // KVO
-
-@property (nonatomic, strong) UIImage *goForwardButtonNomalImage; // KVO
-@property (nonatomic, strong) UIImage *goForwardButtonDisableImage; // KVO
-
-@property (nonatomic, strong) UIColor *titleColor; // KVO
-@property (nonatomic, strong) UIFont *titleFont; // KVO
-
-@property (nonatomic, strong) UIImage *refreshButtonImage; // KVO
-
-@property(nonatomic, copy) NSString *customUserAgent; // TODO
-
-@property(nonatomic, assign) BOOL showRightNavigationButton; // KVO defult NO
-@property (nonatomic, strong) UIImage *rightNavigationButtonNomalImage; // KVO
-@property (nonatomic, strong) UIImage *rightNavigationButtonDisableImage; // KVO
-@property(nonatomic, copy) NSString *rightNavigationButtonTitle; // KVO
-@property (nonatomic, strong) UIFont *rightNavigationButtonTextFont; // KVO
-@property (nonatomic, strong) UIColor *rightNavigationButtonTextColor; // KVO
-
-@property(nonatomic, assign) BOOL closeButtonGobackFirst; // if can goback, close button go back first
-
+@property (nonatomic, strong) UIFont *rightNavigationButtonTextFont;
+@property (nonatomic, strong) UIFont *titleFont;
 
 /**
- * Desc 注册方法，当js调用时会回调到OC
- * name js执行方法名
- * callback 回调 NSArray/NSDictionary/NSString/NSNumber
+ * If can goback,the back button go back first, close when page is last
+ */
+@property(nonatomic, assign) BOOL closeButtonGobackFirst;
+
+/**
+ * Register javascript call name or event ZFWKWebViewEventKey
+ * Callback NSArray/NSDictionary/NSString/NSNumber
  */
 - (void)addMethodName:(NSString *)name callback:(zf_wkWebViewEventCallBack)callback;
 
@@ -88,14 +87,8 @@ UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventGoForwardKey;
 @interface ZFWKWebVC : UIViewController
 - (instancetype)initWithDefaultConfig;
 - (instancetype)initWithConf:(ZFWKWebVCConf *)conf;
-/**
- * Desc 执行JS方法，传入参数
- * name 执行js方法名
- * params 传给js的参数 NSArray/NSDictionary/NSString/NSNumber
- * callback 执行返回参数/Error
- */
-- (void)evaluateJavaScriptMethodName:(NSString *)name params:(id _Nullable)params callback:(void (^ _Nullable)(_Nullable id, NSError * _Nullable error))callback;
 
+- (void)evaluateJavaScriptMethodName:(NSString *)name params:(id _Nullable)params callback:(void (^ _Nullable)(id _Nullable body, NSError * _Nullable error))callback;
 - (void)removeUserScript:(NSString *)script;
 
 @property (nonatomic, strong, readonly) WKWebView *webView;

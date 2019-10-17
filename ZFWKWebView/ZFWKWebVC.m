@@ -37,76 +37,6 @@ static inline BOOL isIPhoneXSeries() {
     return iPhoneXSeries;
 }
 
-@interface ZFWKWebVCTipsView ()
-@property (nonatomic, strong) UIView *contentView;
-@property (nonatomic, strong) UIActivityIndicatorView *indicatorView;
-@property (nonatomic, strong) UILabel *textLabel;
-@property(nonatomic, copy) NSString *text;
-@end
-
-@implementation ZFWKWebVCTipsView
-
-- (instancetype)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        self.backgroundColor = [UIColor clearColor];
-        self.opaque = NO;
-        self.contentMode = UIViewContentModeCenter;
-        self.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin
-                                | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-        self.contentView = ({
-            UIView *view = [[UIView alloc] init];
-            [view setBackgroundColor:[UIColor blackColor]];
-            view;
-        });
-        [self addSubview:self.contentView];
-        
-        self.indicatorView = ({
-            UIActivityIndicatorView *view = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-            view;
-        });
-        [self.contentView addSubview:self.indicatorView];
-        
-        self.textLabel = ({
-            UILabel *label = [[UILabel alloc] init];
-            label.textColor = [UIColor whiteColor];
-            label.font = [UIFont systemFontOfSize:15];
-            label;
-        });
-        [self.contentView addSubview:self.textLabel];
-        
-    }
-    return self;
-}
-
-- (void)setText:(NSString *)text {
-    _text = text;
-    float textMinHeight = 0;
-    float textMinWidth = 0;
-    float tMaxWidth = 300;
-    float th = 44;
-    float tw = 150;
-    float contentViewW = 0;
-    float contentViewH = 0;
-    {
-        CGSize maxsize = CGSizeMake(tMaxWidth, MAXFLOAT);
-        textMinHeight = [text boundingRectWithSize:maxsize options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:15]} context:nil].size.height;
-    }
-    {
-        CGSize maxsize = CGSizeMake(MAXFLOAT, th);
-        textMinWidth = [text boundingRectWithSize:maxsize options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:15]} context:nil].size.width;
-    }
-    
-    if (textMinWidth > th) {
-        
-    }
-    
-    
-}
-
-@end
-
 @interface ZFWKWebVCLoadFailedView ()
 @property (nonatomic, strong) UIButton *hoverButton;
 @property (nonatomic, strong) UIImageView *imageView;
@@ -430,8 +360,7 @@ static inline BOOL isIPhoneXSeries() {
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
     id value = change[NSKeyValueChangeNewKey];
     id oldValue = change[NSKeyValueChangeOldKey];
-    if ([value isKindOfClass:[NSNull class]]) {
-//        NSLog(@"ObserveValueForKeyPath:%@ is null", keyPath);
+    if ([value isKindOfClass:[NSNull class]]) { 
         value = nil;
     }
     if ([oldValue isKindOfClass:[NSNull class]]) {
@@ -620,8 +549,7 @@ static inline BOOL isIPhoneXSeries() {
     }
 }
 
-
-- (void)evaluateJavaScriptMethodName:(NSString *)name params:(id _Nullable)params callback:(void (^)(id _Nullable, NSError * _Nullable))callback {
+- (void)evaluateJavaScriptMethodName:(NSString *)name params:(id _Nullable)params callback:(void (^ _Nullable)(id _Nullable body, NSError * _Nullable error))callback {
     NSString *js = [NSString stringWithFormat:@"%@()", name];
     if (params) {
         if ([NSJSONSerialization isValidJSONObject:params]) {
@@ -665,23 +593,23 @@ static inline BOOL isIPhoneXSeries() {
     }
         
 }
-// 页面开始加载时调
+
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(WKNavigation *)navigation {
     zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventStartLoadKey];
     if (callback) callback(self, self.config, nil);
 }
-// 当内容开始返回时调用
+
 - (void)webView:(WKWebView *)webView didCommitNavigation:(WKNavigation *)navigation {
     zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventStartRecevicedKey];
     if (callback) callback(self, self.config, nil);
     self.loadFailedView.hidden = YES;
 }
-// 页面加载完成之后调用
+
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
     zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventFinishRecevicedKey];
     if (callback) callback(self, self.config, nil);
 }
-// 页面加载失败时调用
+
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error {
     [self showError:error];
 }
@@ -693,14 +621,8 @@ static inline BOOL isIPhoneXSeries() {
 }
 - (void)showError:(NSError *)error {
     if (!error) return;
-    
     zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventLoadFailedKey];
     if (callback) callback(self, self.config, error);
-    
-//    NSLog(@"%s: %@ %@ %@", __func__, error.localizedDescription, error.localizedFailureReason, error.localizedRecoverySuggestion);
-//        if (error.code == NSURLErrorCancelled) {
-//    //        return;
-//        }
     self.loadFailedView.hidden = NO;
     NSString *text = [NSString stringWithFormat:@"点击屏幕重试\n\n错误:%@", error.localizedDescription];
     if (error.localizedFailureReason) {
