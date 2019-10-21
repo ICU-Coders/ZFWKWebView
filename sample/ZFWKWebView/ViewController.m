@@ -48,7 +48,7 @@
     if (button.tag == 1) {
         ZFWKUserDefaultConf *userConf = [[ZFWKUserDefaultConf alloc] init];
 //        userConf.openUrl = @"https://www.baidu.com/";
-        userConf.openUrl = @"http://8.8.8.8:8888/";
+        userConf.openUrl = @"https://baidu.com/";
         userConf.timeoutDuration = 2;
         ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithConf:userConf];
         [self.navigationController pushViewController:web animated:YES];

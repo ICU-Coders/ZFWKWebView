@@ -15,7 +15,7 @@
     if (self) {
         self.showRightNavigationButton = YES;
         self.rightNavigationButtonTitle = @"跳过";
-        self.showBottomBar = NO;
+        self.showBottomBar = YES;
         self.closeButtonGobackFirst = YES;
         [self addMethodName:ZFWKWebViewEventCloseKey callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, id  _Nullable body) {
             
