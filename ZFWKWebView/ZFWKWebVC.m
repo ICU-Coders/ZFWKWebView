@@ -203,6 +203,8 @@ static inline BOOL isIPhoneXSeries() {
 
 - (void)dealloc {
     NSLog(@"%s", __func__);
+}
+- (void)removeObserver {
     if (self.titleLabel) {
         for (NSString *path in [self webViewObserverPaths]) {
             [self.webView removeObserver:self forKeyPath:path context:@"ZFContext"];
@@ -213,7 +215,6 @@ static inline BOOL isIPhoneXSeries() {
             [self.config removeObserver:self forKeyPath:path context:@"ZFWKConfig"];
         }
     }
-    
 }
 - (instancetype)initWithDefaultConfig {
     ZFWKWebVCConf *conf = [[ZFWKWebVCConf alloc] init];
@@ -262,6 +263,7 @@ static inline BOOL isIPhoneXSeries() {
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     [self.config.callbacks removeAllObjects];
+    [self removeObserver];
     self.config = nil;
 }
 - (void)viewDidLoad {
