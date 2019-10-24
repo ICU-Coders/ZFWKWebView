@@ -1,5 +1,5 @@
 language: objective-c
-osx_image: xcode10
+osx_image: xcode11
 sudo: false
 env:
   global:
@@ -7,7 +7,3 @@ env:
   - LANG=en_US.UTF-8
   - LANGUAGE=en_US.UTF-8
   - FASTLANE_LANE=ci_commit
-matrix:
-  include:
-    - osx_image: xcode10
-      env: FASTLANE_LANE=code_coverage FASTLANE_ENV=default
