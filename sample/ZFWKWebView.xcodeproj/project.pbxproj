@@ -16,7 +16,18 @@
 		7D9E7164234D6F9800F9BEE4 /* ImageResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7D9E7161234D6F9800F9BEE4 /* ImageResource.bundle */; };
 		7D9E7165234D6F9800F9BEE4 /* ZFWKWebVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D9E7162234D6F9800F9BEE4 /* ZFWKWebVC.m */; };
 		7D9E7168234D709000F9BEE4 /* ZFWKUserDefaultConf.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D9E7167234D709000F9BEE4 /* ZFWKUserDefaultConf.m */; };
+		7DC5CEA92361703A00D307FE /* ZFWKWebViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5CEA82361703A00D307FE /* ZFWKWebViewTests.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7DC5CEAB2361703A00D307FE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7D9E7136234D6EE900F9BEE4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7D9E713D234D6EE900F9BEE4;
+			remoteInfo = ZFWKWebView;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		7D9E713E234D6EE900F9BEE4 /* ZFWKWebView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZFWKWebView.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -34,10 +45,22 @@
 		7D9E7166234D709000F9BEE4 /* ZFWKUserDefaultConf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZFWKUserDefaultConf.h; sourceTree = "<group>"; };
 		7D9E7167234D709000F9BEE4 /* ZFWKUserDefaultConf.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZFWKUserDefaultConf.m; sourceTree = "<group>"; };
 		7D9E7169234D71EF00F9BEE4 /* ZFWKWebVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZFWKWebVC.h; sourceTree = "<group>"; };
+		7DC5CE9B23614D3400D307FE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		7DC5CE9C23614D3400D307FE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		7DC5CEA62361703A00D307FE /* ZFWKWebViewTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZFWKWebViewTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7DC5CEA82361703A00D307FE /* ZFWKWebViewTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZFWKWebViewTests.m; sourceTree = "<group>"; };
+		7DC5CEAA2361703A00D307FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		7D9E713B234D6EE900F9BEE4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DC5CEA32361703A00D307FE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -51,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				7D9E7140234D6EE900F9BEE4 /* ZFWKWebView */,
+				7DC5CEA72361703A00D307FE /* ZFWKWebViewTests */,
 				7D9E713F234D6EE900F9BEE4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -59,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				7D9E713E234D6EE900F9BEE4 /* ZFWKWebView.app */,
+				7DC5CEA62361703A00D307FE /* ZFWKWebViewTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -93,6 +118,15 @@
 			path = ../../ZFWKWebView;
 			sourceTree = "<group>";
 		};
+		7DC5CEA72361703A00D307FE /* ZFWKWebViewTests */ = {
+			isa = PBXGroup;
+			children = (
+				7DC5CEA82361703A00D307FE /* ZFWKWebViewTests.m */,
+				7DC5CEAA2361703A00D307FE /* Info.plist */,
+			);
+			path = ZFWKWebViewTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -113,6 +147,24 @@
 			productReference = 7D9E713E234D6EE900F9BEE4 /* ZFWKWebView.app */;
 			productType = "com.apple.product-type.application";
 		};
+		7DC5CEA52361703A00D307FE /* ZFWKWebViewTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7DC5CEAD2361703A00D307FE /* Build configuration list for PBXNativeTarget "ZFWKWebViewTests" */;
+			buildPhases = (
+				7DC5CEA22361703A00D307FE /* Sources */,
+				7DC5CEA32361703A00D307FE /* Frameworks */,
+				7DC5CEA42361703A00D307FE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7DC5CEAC2361703A00D307FE /* PBXTargetDependency */,
+			);
+			name = ZFWKWebViewTests;
+			productName = ZFWKWebViewTests;
+			productReference = 7DC5CEA62361703A00D307FE /* ZFWKWebViewTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -125,6 +177,10 @@
 					7D9E713D234D6EE900F9BEE4 = {
 						CreatedOnToolsVersion = 11.0;
 					};
+					7DC5CEA52361703A00D307FE = {
+						CreatedOnToolsVersion = 11.0;
+						TestTargetID = 7D9E713D234D6EE900F9BEE4;
+					};
 				};
 			};
 			buildConfigurationList = 7D9E7139234D6EE900F9BEE4 /* Build configuration list for PBXProject "ZFWKWebView" */;
@@ -134,6 +190,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 7D9E7135234D6EE900F9BEE4;
 			productRefGroup = 7D9E713F234D6EE900F9BEE4 /* Products */;
@@ -141,6 +198,7 @@
 			projectRoot = "";
 			targets = (
 				7D9E713D234D6EE900F9BEE4 /* ZFWKWebView */,
+				7DC5CEA52361703A00D307FE /* ZFWKWebViewTests */,
 			);
 		};
 /* End PBXProject section */
@@ -154,6 +212,13 @@
 				7D9E714E234D6EEA00F9BEE4 /* Assets.xcassets in Resources */,
 				7D9E714C234D6EE900F9BEE4 /* Main.storyboard in Resources */,
 				7D9E7164234D6F9800F9BEE4 /* ImageResource.bundle in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DC5CEA42361703A00D307FE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -172,13 +237,30 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7DC5CEA22361703A00D307FE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7DC5CEA92361703A00D307FE /* ZFWKWebViewTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7DC5CEAC2361703A00D307FE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7D9E713D234D6EE900F9BEE4 /* ZFWKWebView */;
+			targetProxy = 7DC5CEAB2361703A00D307FE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		7D9E714A234D6EE900F9BEE4 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				7D9E714B234D6EE900F9BEE4 /* Base */,
+				7DC5CE9B23614D3400D307FE /* zh-Hans */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -187,6 +269,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				7D9E7150234D6EEA00F9BEE4 /* Base */,
+				7DC5CE9C23614D3400D307FE /* zh-Hans */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -198,6 +281,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -256,6 +340,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -316,7 +401,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.test.wkwebview.ZFWKWebView;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pokey.wkwebview;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -334,9 +419,49 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.test.wkwebview.ZFWKWebView;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pokey.wkwebview;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		7DC5CEAE2361703A00D307FE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 22HHB2G722;
+				INFOPLIST_FILE = ZFWKWebViewTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.pokey.ZFWKWebViewTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ZFWKWebView.app/ZFWKWebView";
+			};
+			name = Debug;
+		};
+		7DC5CEAF2361703A00D307FE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 22HHB2G722;
+				INFOPLIST_FILE = ZFWKWebViewTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.pokey.ZFWKWebViewTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ZFWKWebView.app/ZFWKWebView";
 			};
 			name = Release;
 		};
@@ -357,6 +482,15 @@
 			buildConfigurations = (
 				7D9E7158234D6EEA00F9BEE4 /* Debug */,
 				7D9E7159234D6EEA00F9BEE4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7DC5CEAD2361703A00D307FE /* Build configuration list for PBXNativeTarget "ZFWKWebViewTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7DC5CEAE2361703A00D307FE /* Debug */,
+				7DC5CEAF2361703A00D307FE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

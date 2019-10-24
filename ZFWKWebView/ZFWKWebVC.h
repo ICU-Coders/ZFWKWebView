@@ -46,6 +46,7 @@ UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventGoForwardKey;
 
 @property(nonatomic, assign) int timeoutDuration; // default 15s
 @property(nonatomic, assign) float progressBarHeight; // default 2.5
+@property(nonatomic, assign) float navigationButtonSpace; // default 0;
 
 @property (nonatomic, strong) UIColor *progressBackgroundColor; // [UIColor clearColor]
 @property (nonatomic, strong) UIColor *progressTintColor; // [UIColor colorWithRed:86/255.0 green:187/255.0 blue:59/255.0 alpha:1]
@@ -82,7 +83,15 @@ UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventGoForwardKey;
  */
 - (void)addMethodName:(NSString *)name callback:(zf_wkWebViewEventCallBack)callback;
 
++ (NSString *)localizedStringForKey:(NSString *)key;
 @end
+
+
+
+
+
+
+
 
 @interface ZFWKWebVC : UIViewController
 - (instancetype)initWithDefaultConfig;
@@ -94,6 +103,7 @@ UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventGoForwardKey;
 @property (nonatomic, strong, readonly) WKWebView *webView;
 @property (nonatomic, strong, nullable) ZFWKWebVCBottomBar *bottomBar;
 @property (nonatomic, strong, readonly) ZFWKWebVCConf *config;
+
 
 
 @end

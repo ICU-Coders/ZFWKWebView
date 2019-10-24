@@ -17,6 +17,8 @@
 #define ZF_SCREEN_WIDTH self.view.frame.size.width
 #define ZF_SCREEN_HEIGHT self.view.frame.size.height
 
+#define SOURCE_BUDNLE [NSBundle bundleWithURL:[[NSBundle bundleForClass:[ZFWKWebVC class]] URLForResource:@"ImageResource" withExtension:@"bundle"]]
+
 NSString * const ZFWKWebViewEventStartLoadKey = @"ZFWKWebViewEventStartLoadKey";
 NSString * const ZFWKWebViewEventStartRecevicedKey = @"ZFWKWebViewEventStartRecevicedKey";
 NSString * const ZFWKWebViewEventFinishRecevicedKey = @"ZFWKWebViewEventFinishRecevicedKey";
@@ -143,11 +145,9 @@ static inline BOOL isIPhoneXSeries() {
         _showCloseButton = YES;
         _callbacks = [NSMutableDictionary dictionaryWithCapacity:100];
         _progressBarHeight = 2.5;
+        _navigationButtonSpace = 0;
         
-        NSBundle *bundle = [NSBundle bundleForClass:[ZFWKWebVC class]];
-        NSURL *url = [bundle URLForResource:@"ImageResource" withExtension:@"bundle"];
-        NSBundle *imageBundle = [NSBundle bundleWithURL:url];
-        
+        NSBundle *imageBundle = SOURCE_BUDNLE;
         
         _backButtonImage = [UIImage imageNamed:@"BackButtonIcon" inBundle:imageBundle compatibleWithTraitCollection:nil];
         _closeButtonImage = [UIImage imageNamed:@"CloseButtonIcon" inBundle:imageBundle compatibleWithTraitCollection:nil];
@@ -168,6 +168,28 @@ static inline BOOL isIPhoneXSeries() {
 - (void)addMethodName:(NSString *)name callback:(zf_wkWebViewEventCallBack)callback {
     if (callback) self.callbacks[name] = callback;
     
+}
+
+
++ (NSString *)localizedStringForKey:(NSString *)key {
+    NSString *localizedStr = nil;
+    static NSBundle *bundle = nil;
+    if (bundle == nil) {
+        
+        NSString *language = [NSLocale preferredLanguages].firstObject;
+        if ([language hasPrefix:@"en"]) {
+            language = @"en";
+        } else if ([language hasPrefix:@"zh"]) {
+            language = @"zh-Hans";
+        } else {
+            language = @"en";
+        }
+        
+        bundle = [NSBundle bundleWithPath:[SOURCE_BUDNLE pathForResource:language ofType:@"lproj"]];
+    }
+    NSString *value = [bundle localizedStringForKey:key value:nil table:nil];
+    localizedStr = [[NSBundle mainBundle] localizedStringForKey:key value:value table:nil];
+    return localizedStr;
 }
 
 @end
@@ -228,7 +250,6 @@ static inline BOOL isIPhoneXSeries() {
         scrollJudgeDistance = 100;
         self.webView = ({
             WKWebViewConfiguration *webViewConf = [[WKWebViewConfiguration alloc] init];
-//            [webViewConf.userContentController addScriptMessageHandler:self name:@"notify"];
             WKWebView *webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:webViewConf];
             webView.navigationDelegate = self;
             webView.UIDelegate = self;
@@ -263,6 +284,7 @@ static inline BOOL isIPhoneXSeries() {
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     [self.config.callbacks removeAllObjects];
+    // fixed with iOS10,remove observe first
     [self removeObserver];
     self.config = nil;
 }
@@ -387,7 +409,7 @@ static inline BOOL isIPhoneXSeries() {
             self.progressView.hidden = progress >= 1.0;
         } else if ([keyPath isEqualToString:@"URL"]) {
             if (value) {
-                self.originLabel.text = [NSString stringWithFormat:@"此网页由%@提供", ((NSURL *)value).host];
+                self.originLabel.text = [NSString stringWithFormat:@"%@%@%@", [ZFWKWebVCConf localizedStringForKey:@"Support by "],((NSURL *)value).host, [ZFWKWebVCConf localizedStringForKey:@"support"]];
                 self.previousURL = value;
             } else {
                 self.previousURL = oldValue;
@@ -472,15 +494,19 @@ static inline BOOL isIPhoneXSeries() {
     
     [self.navView setFrame:CGRectMake(0, 0, ZF_SCREEN_WIDTH, navHeight)];
     {
-        float btnW = 44;
-        float nomalMargin = 0;
-        [self.backButton setFrame:CGRectMake(nomalMargin, navHeight - btnW, btnW, btnW)];
-        [self.closeButton setFrame:CGRectMake(nomalMargin + btnW + nomalMargin, navHeight - btnW, btnW, btnW)];
-        float titleLabelWidth = 300;
+        float btnW = 44 - 10;
+        float btnH = 44;
+        float nomalMargin = self.config.navigationButtonSpace;
+        [self.backButton setFrame:CGRectMake(nomalMargin, navHeight - btnH, btnW, btnH)];
+        [self.closeButton setFrame:CGRectMake(nomalMargin + btnW + nomalMargin, navHeight - btnH, btnW, btnH)];
         float rightButtonW = 80;
-        [self.titleLabel setFrame:CGRectMake((ZF_SCREEN_WIDTH - titleLabelWidth) * 0.5, navHeight - btnW, titleLabelWidth, btnW)];
+        float left = nomalMargin + btnW + nomalMargin + btnW + nomalMargin;
+        float right = rightButtonW;
+        float maxDistance = MAX(left, right);
+        float titleLabelWidth = ZF_SCREEN_WIDTH - maxDistance * 2 - nomalMargin * 2;
+        [self.titleLabel setFrame:CGRectMake((ZF_SCREEN_WIDTH - titleLabelWidth) * 0.5, navHeight - btnH, titleLabelWidth, btnH)];
         [self.progressView setFrame:CGRectMake(0, navHeight - self.config.progressBarHeight, ZF_SCREEN_WIDTH, self.config.progressBarHeight)];
-        [self.navigationRightButon setFrame:CGRectMake(ZF_SCREEN_WIDTH - 10 - rightButtonW, navHeight - btnW, rightButtonW, btnW)];
+        [self.navigationRightButon setFrame:CGRectMake(ZF_SCREEN_WIDTH - 10 - rightButtonW, navHeight - btnH, rightButtonW, btnH)];
     }
     y += navHeight;
     [self.webView setFrame:CGRectMake(0, y, ZF_SCREEN_WIDTH, ZF_SCREEN_HEIGHT - y)];
@@ -509,7 +535,7 @@ static inline BOOL isIPhoneXSeries() {
 }
 
 - (void)refresh {
-    self.titleLabel.text = @"加载中...";
+    self.titleLabel.text = [ZFWKWebVCConf localizedStringForKey:@"Loading..."];
     zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventRefreshKey];
     if (callback) callback(self, self.config, nil);
     [self.webView stopLoading];
@@ -593,8 +619,8 @@ static inline BOOL isIPhoneXSeries() {
         completionHandler();
         return;
     }
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:message preferredStyle:UIAlertControllerStyleAlert];
-    [alertController addAction:[UIAlertAction actionWithTitle:@"确认" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) { completionHandler();
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[ZFWKWebVCConf localizedStringForKey:@"Tips"] message:message preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addAction:[UIAlertAction actionWithTitle:[ZFWKWebVCConf localizedStringForKey:@"Sure"] style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) { completionHandler();
     }]];
     if (self.config) {
         [self presentViewController:alertController animated:YES completion:^{}];
@@ -634,14 +660,15 @@ static inline BOOL isIPhoneXSeries() {
     zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventLoadFailedKey];
     if (callback) callback(self, self.config, error);
     self.loadFailedView.hidden = NO;
-    NSString *text = [NSString stringWithFormat:@"点击屏幕重试\n\n错误:%@", error.localizedDescription];
+    NSString *text = [NSString stringWithFormat:@"%@\n\n%@:%@",[ZFWKWebVCConf localizedStringForKey:@"Click to try again"],[ZFWKWebVCConf localizedStringForKey:@"Error"], error.localizedDescription];
     if (error.localizedFailureReason) {
-        text = [text stringByAppendingFormat:@"\n原因:%@", error.localizedFailureReason];
+        text = [text stringByAppendingFormat:@"\n%@:%@", [ZFWKWebVCConf localizedStringForKey:@"Reason"], error.localizedFailureReason];
     }
     if (error.localizedRecoverySuggestion) {
-        text = [text stringByAppendingFormat:@"\n解决:%@", error.localizedRecoverySuggestion];
+        text = [text stringByAppendingFormat:@"\n%@:%@",[ZFWKWebVCConf localizedStringForKey:@"Solution"], error.localizedRecoverySuggestion];
     }
-    self.titleLabel.text = @"无法打开此网页";
+    
+    self.titleLabel.text = [ZFWKWebVCConf localizedStringForKey:@"Can't open this page"];
     self.loadFailedView.textLabel.text = text;
 }
 
@@ -673,5 +700,7 @@ static inline BOOL isIPhoneXSeries() {
     
     
 }
+
+
 
 @end

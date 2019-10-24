@@ -1,0 +1,18 @@
+/* 
+  ZFWKWebView
+
+  Created by 张帆 on 2019/10/24.
+  Copyright © 2019 张帆. All rights reserved.
+*/
+
+
+"Support by " = "此网页由";
+"Can't open this page" = "无法打开此网页";
+"Reason" = "原因";
+"Solution" = "解决";
+"Click to try again" = "点击屏幕重试";
+"Error" = "错误";
+"Tips" = "提示";
+"Sure" = "确定";
+"Loading..." = "加载中...";
+"support" = "提供";

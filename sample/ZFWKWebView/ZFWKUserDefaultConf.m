@@ -14,12 +14,18 @@
     self = [super init];
     if (self) {
         self.showRightNavigationButton = YES;
-        self.rightNavigationButtonTitle = @"跳过";
+        self.rightNavigationButtonTitle = @"Skip";
         self.showBottomBar = YES;
         self.closeButtonGobackFirst = YES;
+        // register event
         [self addMethodName:ZFWKWebViewEventCloseKey callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, id  _Nullable body) {
-            
+            NSLog(@"ZFWKWebViewEventCloseKey");
         }];
+        [self addMethodName:ZFWKWebViewEventRightButtonClickKey callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, id  _Nullable body) {
+            NSLog(@"ZFWKWebViewEventRightButtonClickKey");
+        }];
+        
+        // register javastript
         [self addMethodName:@"formPost" callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, NSDictionary  *_Nullable body) {
             NSString *callback = body[@"callback"];
             [target evaluateJavaScriptMethodName:callback params:@{@"test": @"test"} callback:nil];

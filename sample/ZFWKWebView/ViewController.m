@@ -25,7 +25,7 @@
 
         UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
         [button setFrame:CGRectMake(100, 150, 100, 44)];
-        [button setTitle:@"自定义" forState:UIControlStateNormal];
+        [button setTitle:@"Custom" forState:UIControlStateNormal];
         [self.view addSubview:button];
         button.tag = 1;
         [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -35,7 +35,7 @@
         UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
         [button setFrame:CGRectMake(100, 250, 100, 44)];
         button.tag = 2;
-        [button setTitle:@"默认" forState:UIControlStateNormal];
+        [button setTitle:@"Nomal" forState:UIControlStateNormal];
         [self.view addSubview:button];
         [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -47,8 +47,7 @@
 - (void)buttonClicked:(UIButton *)button {
     if (button.tag == 1) {
         ZFWKUserDefaultConf *userConf = [[ZFWKUserDefaultConf alloc] init];
-//        userConf.openUrl = @"https://www.baidu.com/";
-        userConf.openUrl = @"https://baidu.com/";
+        userConf.openUrl = @"https://www.baidu.com/";
         userConf.timeoutDuration = 2;
         ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithConf:userConf];
         [self.navigationController pushViewController:web animated:YES];
@@ -56,7 +55,6 @@
     } else {
         ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithDefaultConfig];
         [web.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://www.apple.com.cn"]]];
-//        [self presentViewController:web animated:YES completion:nil];
         [self.navigationController pushViewController:web animated:YES];
     }
     
