@@ -2,7 +2,7 @@ language: objective-c
 osx_image: xcode11
 sudo: false
 xcode_project:/sample/ZFWKWebView.xcodeproj
-xcode_scheme:ZFWKWebViewTests
+xcode_scheme:/sample/ZFWKWebViewTests
 xcode_destination: platform=iOS Simulator,OS=11.3,name=iPhone X
 env:
   global:
