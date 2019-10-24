@@ -3,6 +3,7 @@
   <img src="https://github.com/FranLucky/IconLib/blob/master/icon.png?raw=true" alt="ZFWKWebView" title="ZFWKWebView">
 </p>
 
+[![Build Status](https://travis-ci.org/FranLucky/ZFWKWebView.svg?branch=master)](https://travis-ci.org/FranLucky/ZFWKWebView)
 ![podversion](https://img.shields.io/cocoapods/v/ZFWKWebView.svg)
 [![Platform](https://img.shields.io/cocoapods/p/ZFWKWebView.svg?style=flat)](http://cocoadocs.org/docsets/ZFWKWebView)
 
