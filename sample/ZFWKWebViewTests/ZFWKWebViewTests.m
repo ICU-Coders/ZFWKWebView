@@ -25,7 +25,7 @@
 
 - (void)testLocalizedString {
     NSString *loc = [ZFWKWebVCConf localizedStringForKey:@"Support by"];
-    XCTAssertEqualObjects(loc, @"此网页由");
+    XCTAssertEqualObjects(loc, @"Support by");
     NSLog(@"loc:%@", loc);
 }
 
