@@ -2,3 +2,4 @@ language: objective-c
 osx_image: xcode11
 xcode_project: sample/ZFWKWebView.xcodeproj
 xcode_scheme: ZFWKWebViewTests
+xcode_destination: platform:iOS Simulator, id:60CD9292-3EC7-4C1C-8166-E1C2F5A47F01, OS:13.0, name:iPhone 8
