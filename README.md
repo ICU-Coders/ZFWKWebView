@@ -1,7 +1,6 @@
-
 <p align="center" >
-  <img src="https://github.com/FranLucky/IconLib/blob/master/icon.png?raw=true" alt="ZFWKWebView" title="ZFWKWebView">
-</p>
+   <img src="https://raw.githubusercontent.com/FranLucky/IconLib/master/icon.png" alt="ZFAlertController" title="ZFAlertController">
+ </p>
 
 ![MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)
 [![Build Status](https://travis-ci.org/FranLucky/ZFWKWebView.svg?branch=master)](https://travis-ci.org/FranLucky/ZFWKWebView)
