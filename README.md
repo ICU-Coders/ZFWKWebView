@@ -43,7 +43,7 @@ ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithDefaultConfig];
 [self presentViewController:web animated:YES completion:nil];
 ```
 ### Custom Config
-Subclass config from ZFWKWebVCConf
+Subclass config from `ZFWKWebVCConf`
 ```
 ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithConf:userConf];
 ```
