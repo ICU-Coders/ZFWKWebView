@@ -224,7 +224,7 @@ static inline BOOL isIPhoneXSeries() {
 }
 
 - (void)dealloc {
-    NSLog(@"%s", __func__);
+    [self removeObserver];
 }
 - (void)removeObserver {
     if (self.titleLabel) {
@@ -284,9 +284,6 @@ static inline BOOL isIPhoneXSeries() {
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     [self.config.callbacks removeAllObjects];
-    // fixed with iOS10,remove observe first
-    [self removeObserver];
-    self.config = nil;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
