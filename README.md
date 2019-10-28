@@ -13,7 +13,7 @@
  Choose `ZFWKWebView` for your next project, or migrate over your existing projects—you'll be happy you did!
 
 ## Adding `ZFWKWebView` to your project
-##### CocoaPods
+### CocoaPods
 [CocoaPods](http://cocoapods.org) is the recommended way to add `ZFWKWebView` to your project.
 Specify it in your Podfile:
 ```
