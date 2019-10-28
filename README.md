@@ -3,17 +3,19 @@
   <img src="https://github.com/FranLucky/IconLib/blob/master/icon.png?raw=true" alt="ZFWKWebView" title="ZFWKWebView">
 </p>
 
+![MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)
 [![Build Status](https://travis-ci.org/FranLucky/ZFWKWebView.svg?branch=master)](https://travis-ci.org/FranLucky/ZFWKWebView)
 ![podversion](https://img.shields.io/cocoapods/v/ZFWKWebView.svg)
 [![Platform](https://img.shields.io/cocoapods/p/ZFWKWebView.svg?style=flat)](http://cocoadocs.org/docsets/ZFWKWebView)
 
 
-ZFWKWebView is a Highly customizable WKWebView for iOS.
- Choose ZFWKWebView for your next project, or migrate over your existing projects—you'll be happy you did!
+`ZFWKWebView` is a Highly customizable WKWebView for iOS.
+ Choose `ZFWKWebView` for your next project, or migrate over your existing projects—you'll be happy you did!
 
-### Installation with CocoaPods
-##### Podfile
-To integrate ZFWKWebView into your Xcode project using CocoaPods, specify it in your Podfile:
+## Adding `ZFWKWebView` to your project
+##### CocoaPods
+[CocoaPods](http://cocoapods.org) is the recommended way to add `ZFWKWebView` to your project.
+Specify it in your Podfile:
 ```
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '9.0'
@@ -26,28 +28,33 @@ Then, run the following command:
 ```
 pod install --repo-update
 ```
+### Source files
+Alternatively you can directly add the `ZFWKWebView.h` and `ZFWKWebView.m` source files to your project.
+1. Download the [latest code version](https://github.com/ICU-Coders/ZFWKWebView/archive/master.zip) or add the repository as a git submodule to your git-tracked project.
+2. Open your project in Xcode, then drag and drop `ZFWKWebView.h` and `ZFWKWebView.m` onto your project (use the "Product Navigator view"). Make sure to select Copy items when asked if you extracted the code archive outside of your project.
+3. Include `ZFWKWebView` wherever you need it with `#import "ZFWKWebView.h"`.
 
-###  Usage
-All the usages are equal with UIAlertController
-####  DefaultConfig
+##  Usage
+
+###  DefaultConfig
 ```
 ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithDefaultConfig];
 [web.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://www.apple.com.cn"]]];
 [self presentViewController:web animated:YES completion:nil];
 ```
-#### Custom Config
+### Custom Config
 Subclass config from ZFWKWebVCConf
 ```
 ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithConf:userConf];
 ```
-#### Register js or event with config
+### Register js or event with config
 Body is serialization response 
 ```
 [self addMethodName:ZFWKWebViewEventCloseKey callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, id  _Nullable body) {
     
 }];
 ```
-#### EvaluateJavaScript
+### EvaluateJavaScript
 ```
 [webVC evaluateJavaScriptMethodName:@"test" params:@{} callback:^(id _Nullable, NSError * _Nullable error) {
     
@@ -55,7 +62,7 @@ Body is serialization response
 ```
 
 
-#### MIT License
+## MIT License
 
 Copyright (c) 2019 Pokeey
 
