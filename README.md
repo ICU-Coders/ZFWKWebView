@@ -20,7 +20,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '9.0'
 
 target 'TargetName' do
-pod 'ZFWKWebView', '~> 1.1.4'
+pod 'ZFWKWebView', '~> 1.1.5'
 end
 ```
 Then, run the following command:

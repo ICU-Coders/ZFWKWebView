@@ -224,6 +224,8 @@ static inline BOOL isIPhoneXSeries() {
 }
 
 - (void)dealloc {
+    NSLog(@"%s", __func__);
+    [self.config.callbacks removeAllObjects];
     [self removeObserver];
 }
 - (void)removeObserver {
@@ -283,7 +285,6 @@ static inline BOOL isIPhoneXSeries() {
 }
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    [self.config.callbacks removeAllObjects];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -317,6 +318,7 @@ static inline BOOL isIPhoneXSeries() {
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
             button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
             button.titleLabel.textAlignment = NSTextAlignmentRight;
+            [button addTarget:self action:@selector(rightButtonClick:) forControlEvents:UIControlEventTouchUpInside];
             button.hidden = YES;
             button;
         });
@@ -589,7 +591,8 @@ static inline BOOL isIPhoneXSeries() {
             NSError *err = nil;
             NSData *data = [NSJSONSerialization dataWithJSONObject:params options:NSJSONWritingPrettyPrinted error:&err];
             if (!err) {
-                NSString *paramStr = [NSString stringWithCString:data.bytes encoding:NSUTF8StringEncoding];
+                // fix bug with json dump to nil
+                NSString *paramStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                 js = [NSString stringWithFormat:@"%@(%@)", name, paramStr];
             } else {
                 NSLog(@"%s, format params error:%@", __func__, err.localizedDescription);

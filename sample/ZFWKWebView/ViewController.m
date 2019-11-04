@@ -49,7 +49,11 @@
         ZFWKUserDefaultConf *userConf = [[ZFWKUserDefaultConf alloc] init];
         userConf.openUrl = @"https://www.baidu.com/";
         userConf.timeoutDuration = 2;
+        [userConf addMethodName:ZFWKWebViewEventRightButtonClickKey callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, id  _Nullable body) {
+            [target presentViewController:[[ZFWKWebVC alloc] initWithDefaultConfig] animated:YES completion:nil];
+        }];
         ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithConf:userConf];
+        
         [self.navigationController pushViewController:web animated:YES];
 
     } else {
