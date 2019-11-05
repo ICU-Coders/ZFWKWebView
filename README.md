@@ -76,28 +76,24 @@ ZFWKWebViewEventGoForwardKey
 
 ### Custom UI
 
-#### Ugly, But it's realy flexible.
+#### Image is ugly, But `ZFWKWebView` is realy flexible.
 
 ![Custom_UI](https://raw.githubusercontent.com/ICU-Coders/IconLib/master/ZFWKWebView/customUI.jpg)
 
 ```
-{
-   self.titleFont = [UIFont systemFontOfSize:33 weight:UIFontWeightBold];
-   self.titleColor = [UIColor redColor];
-   self.navigationBackgroundColor = [UIColor greenColor];
-}
+self.titleFont = [UIFont systemFontOfSize:33 weight:UIFontWeightBold];
+self.titleColor = [UIColor redColor];
+self.navigationBackgroundColor = [UIColor greenColor];
 
-{
-   self.showRightNavigationButton = YES;
-   self.rightNavigationButtonTitle = @"Skip";
-    self.rightNavigationButtonTextFont = [UIFont systemFontOfSize:13 weight:UIFontWeightRegular];
-    self.rightNavigationButtonTextColor = [UIColor yellowColor];
-}
-{
-   self.progressBarHeight = 40;
-   self.progressTintColor = [UIColor colorWithRed:86/255.0 green:187/255.0 blue:59/255.0 alpha:1];
-   self.progressBackgroundColor = [UIColor clearColor];
-}
+self.showRightNavigationButton = YES;
+self.rightNavigationButtonTitle = @"Skip";
+self.rightNavigationButtonTextFont = [UIFont systemFontOfSize:13 weight:UIFontWeightRegular];
+self.rightNavigationButtonTextColor = [UIColor yellowColor];
+
+self.progressBarHeight = 40;
+self.progressTintColor = [UIColor colorWithRed:86/255.0 green:187/255.0 blue:59/255.0 alpha:1];
+self.progressBackgroundColor = [UIColor clearColor];
+
 ```
 
 #### Custom progress bar
@@ -116,10 +112,8 @@ userConf.progressBackgroundColor = [UIColor clearColor];
 ![Custom_UI](https://raw.githubusercontent.com/ICU-Coders/IconLib/master/ZFWKWebView/bottomBar.jpg)
 
 ```
-{
-	self.showBottomBar = YES;
-	self.showCloseButton = NO; 
-}
+self.showBottomBar = YES;
+self.showCloseButton = NO; 
 ```
 
 
