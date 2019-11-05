@@ -44,6 +44,8 @@ ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithDefaultConfig];
 ### Custom Config
 Subclass config from `ZFWKWebVCConf`
 ```
+@interface ZFWKUserDefaultConf : ZFWKWebVCConf
+ZFWKUserDefaultConf *userConf = [[ZFWKUserDefaultConf alloc] init];
 ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithConf:userConf];
 ```
 ### Register js or event with config

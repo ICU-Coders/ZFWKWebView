@@ -58,9 +58,7 @@
 - (void)buttonClicked:(UIButton *)button {
     if (button.tag == 1) {
         ZFWKUserDefaultConf *userConf = [[ZFWKUserDefaultConf alloc] init];
-        
         ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithConf:userConf];
-        
         [self.navigationController pushViewController:web animated:YES];
 
     } else {
