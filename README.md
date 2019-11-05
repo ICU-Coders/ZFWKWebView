@@ -1,5 +1,5 @@
 <p align="center" >
-   <img src="https://raw.githubusercontent.com/FranLucky/IconLib/master/icon.jpg" alt="ICU-Coders" title="ICU-Coders">
+   <img src="https://raw.githubusercontent.com/ICU-Coders/IconLib/master/icon.jpg" alt="ICU-Coders" title="ICU-Coders">
  </p>
 
 ![MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)
