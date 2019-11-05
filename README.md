@@ -20,7 +20,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '9.0'
 
 target 'TargetName' do
-pod 'ZFWKWebView', '~> 1.1.5'
+pod 'ZFWKWebView', '~> 1.1.6'
 end
 ```
 Then, run the following command:
@@ -53,12 +53,75 @@ Body is serialization response
     
 }];
 ```
+
+Per-define event key
+```
+ZFWKWebViewEventStartLoadKey 
+ZFWKWebViewEventStartRecevicedKey 
+ZFWKWebViewEventFinishRecevicedKey 
+ZFWKWebViewEventLoadFailedKey 
+ZFWKWebViewEventRefreshKey 
+ZFWKWebViewEventCloseKey 
+ZFWKWebViewEventRightButtonClickKey 
+ZFWKWebViewEventGoBackKey 
+ZFWKWebViewEventGoForwardKey 
+```
+
 ### EvaluateJavaScript
 ```
 [webVC evaluateJavaScriptMethodName:@"test" params:@{} callback:^(id _Nullable, NSError * _Nullable error) {
     
 }];
 ```
+
+### Custom UI
+
+It's realy flexible.
+
+![Custom_UI](https://raw.githubusercontent.com/ICU-Coders/IconLib/master/ZFWKWebView/customUI.jpg)
+
+```
+{
+   self.titleFont = [UIFont systemFontOfSize:33 weight:UIFontWeightBold];
+   self.titleColor = [UIColor redColor];
+   self.navigationBackgroundColor = [UIColor greenColor];
+}
+
+{
+   self.showRightNavigationButton = YES;
+   self.rightNavigationButtonTitle = @"Skip";
+    self.rightNavigationButtonTextFont = [UIFont systemFontOfSize:13 weight:UIFontWeightRegular];
+    self.rightNavigationButtonTextColor = [UIColor yellowColor];
+}
+{
+   self.progressBarHeight = 40;
+   self.progressTintColor = [UIColor colorWithRed:86/255.0 green:187/255.0 blue:59/255.0 alpha:1];
+   self.progressBackgroundColor = [UIColor clearColor];
+}
+```
+
+Custom progress bar
+
+![Custom_progress_bar](https://raw.githubusercontent.com/ICU-Coders/IconLib/master/ZFWKWebView/custom_progress_small.gif)
+
+```
+ZFWKUserDefaultConf *userConf = [[ZFWKUserDefaultConf alloc] init];
+userConf.progressBarHeight = 40;
+userConf.progressTintColor = [UIColor colorWithRed:86/255.0 green:187/255.0 blue:59/255.0 alpha:1];
+userConf.progressBackgroundColor = [UIColor clearColor];
+```
+
+Show Bottom Bar
+
+![Custom_UI](https://raw.githubusercontent.com/ICU-Coders/IconLib/master/ZFWKWebView/bottomBar.jpg)
+
+```
+{
+	self.showBottomBar = YES;
+	self.showCloseButton = NO; 
+}
+```
+
 
 
 ## MIT License

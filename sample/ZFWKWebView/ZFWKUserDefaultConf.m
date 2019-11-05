@@ -13,10 +13,31 @@
 {
     self = [super init];
     if (self) {
-        self.showRightNavigationButton = YES;
-        self.rightNavigationButtonTitle = @"Skip";
-        self.showBottomBar = YES;
-        self.closeButtonGobackFirst = YES;
+        {
+            self.openUrl = @"https://www.baidu.com/";
+            self.timeoutDuration = 2;
+        }
+        {
+           self.titleFont = [UIFont systemFontOfSize:33 weight:UIFontWeightBold];
+           self.titleColor = [UIColor redColor];
+            self.navigationBackgroundColor = [UIColor greenColor];
+        }
+        {
+//           self.showBottomBar = YES;
+//           self.showCloseButton = NO;
+        }
+        {
+           self.showRightNavigationButton = YES;
+           self.rightNavigationButtonTitle = @"Skip";
+            self.rightNavigationButtonTextFont = [UIFont systemFontOfSize:13 weight:UIFontWeightRegular];
+            self.rightNavigationButtonTextColor = [UIColor yellowColor];
+        }
+        {
+           self.progressBarHeight = 40;
+           self.progressTintColor = [UIColor colorWithRed:86/255.0 green:187/255.0 blue:59/255.0 alpha:1];
+           self.progressBackgroundColor = [UIColor clearColor];
+        }
+        
         // register event
         [self addMethodName:ZFWKWebViewEventCloseKey callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, id  _Nullable body) {
             NSLog(@"ZFWKWebViewEventCloseKey");

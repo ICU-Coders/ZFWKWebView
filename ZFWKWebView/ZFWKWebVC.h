@@ -45,9 +45,10 @@ UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventGoForwardKey;
 @property(nonatomic, copy) NSString *openUrl;
 
 @property(nonatomic, assign) int timeoutDuration; // default 15s
-@property(nonatomic, assign) float progressBarHeight; // default 2.5
+@property(nonatomic, assign) float progressBarHeight; // default 2
 @property(nonatomic, assign) float navigationButtonSpace; // default 0;
 
+@property (nonatomic, strong) UIColor *navigationBackgroundColor; // ZF_WK_BACKGROUD_COLOR
 @property (nonatomic, strong) UIColor *progressBackgroundColor; // [UIColor clearColor]
 @property (nonatomic, strong) UIColor *progressTintColor; // [UIColor colorWithRed:86/255.0 green:187/255.0 blue:59/255.0 alpha:1]
 @property (nonatomic, strong) UIColor *titleColor;
@@ -64,7 +65,7 @@ UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventGoForwardKey;
 @property (nonatomic, strong) UIImage *rightNavigationButtonDisableImage;
 
 @property(nonatomic, assign) BOOL showBottomBar; // default NO
-@property(nonatomic, assign) BOOL showCloseButton;
+@property(nonatomic, assign) BOOL showCloseButton; // default YES
 @property(nonatomic, assign) BOOL showRightNavigationButton; // defult NO
 
 @property(nonatomic, copy) NSString *rightNavigationButtonTitle;
@@ -75,7 +76,7 @@ UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventGoForwardKey;
 /**
  * If can goback,the back button go back first, close when page is last
  */
-@property(nonatomic, assign) BOOL closeButtonGobackFirst;
+@property(nonatomic, assign) BOOL closeButtonGobackFirst; // default YES
 
 /**
  * Register javascript call name or event ZFWKWebViewEventKey

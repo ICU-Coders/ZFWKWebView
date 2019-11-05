@@ -144,7 +144,7 @@ static inline BOOL isIPhoneXSeries() {
         _closeButtonGobackFirst = YES;
         _showCloseButton = YES;
         _callbacks = [NSMutableDictionary dictionaryWithCapacity:100];
-        _progressBarHeight = 2.5;
+        _progressBarHeight = 1;
         _navigationButtonSpace = 0;
         
         NSBundle *imageBundle = SOURCE_BUDNLE;
@@ -159,6 +159,7 @@ static inline BOOL isIPhoneXSeries() {
         
         _titleColor = ZF_WK_BLACKCLOLR;
         _titleFont = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
+        _navigationBackgroundColor = ZF_WK_BACKGROUD_COLOR;
         
         _rightNavigationButtonTextFont = [UIFont systemFontOfSize:15 weight:UIFontWeightMedium];
         _rightNavigationButtonTextColor = ZF_WK_BLUE_COLOR;
@@ -224,7 +225,7 @@ static inline BOOL isIPhoneXSeries() {
 }
 
 - (void)dealloc {
-    NSLog(@"%s", __func__);
+//    NSLog(@"%s", __func__);
     [self.config.callbacks removeAllObjects];
     [self removeObserver];
 }
@@ -292,7 +293,7 @@ static inline BOOL isIPhoneXSeries() {
     [self.view setBackgroundColor:[UIColor whiteColor]];
     UIView *navView = ({
         UIView *view = [[UIView alloc] init];
-        [view setBackgroundColor:ZF_WK_BACKGROUD_COLOR];
+        [view setBackgroundColor:self.config.navigationBackgroundColor];
         self.backButton = ({
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
             [button addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
@@ -504,7 +505,9 @@ static inline BOOL isIPhoneXSeries() {
         float maxDistance = MAX(left, right);
         float titleLabelWidth = ZF_SCREEN_WIDTH - maxDistance * 2 - nomalMargin * 2;
         [self.titleLabel setFrame:CGRectMake((ZF_SCREEN_WIDTH - titleLabelWidth) * 0.5, navHeight - btnH, titleLabelWidth, btnH)];
-        [self.progressView setFrame:CGRectMake(0, navHeight - self.config.progressBarHeight, ZF_SCREEN_WIDTH, self.config.progressBarHeight)];
+        float progress_height = self.config.progressBarHeight * .5;
+        [self.progressView setFrame:CGRectMake(0, navHeight - self.config.progressBarHeight, ZF_SCREEN_WIDTH, 1)];
+        self.progressView.transform = CGAffineTransformMakeScale(1, progress_height);
         [self.navigationRightButon setFrame:CGRectMake(ZF_SCREEN_WIDTH - 10 - rightButtonW, navHeight - btnH, rightButtonW, btnH)];
     }
     y += navHeight;

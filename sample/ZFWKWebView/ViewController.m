@@ -39,6 +39,17 @@
         [self.view addSubview:button];
         [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
+    
+//    UIProgressView *pro = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
+//    pro.progress = .5;
+//    [self.view addSubview:pro];
+//    [pro setFrame:CGRectMake(0, 200, 200, 100)];
+//    pro.transform = CGAffineTransformMakeScale(1, 10);
+//
+//    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(200, 200, 100, 2)];
+//    [view setBackgroundColor:[UIColor blueColor]];
+//    view.transform = CGAffineTransformMakeScale(1, 10);
+//    [self.view addSubview:view];
 }
 
 - (void)temp {
@@ -47,11 +58,7 @@
 - (void)buttonClicked:(UIButton *)button {
     if (button.tag == 1) {
         ZFWKUserDefaultConf *userConf = [[ZFWKUserDefaultConf alloc] init];
-        userConf.openUrl = @"https://www.baidu.com/";
-        userConf.timeoutDuration = 2;
-        [userConf addMethodName:ZFWKWebViewEventRightButtonClickKey callback:^(ZFWKWebVC * _Nonnull target, ZFWKWebVCConf * _Nonnull config, id  _Nullable body) {
-            [target presentViewController:[[ZFWKWebVC alloc] initWithDefaultConfig] animated:YES completion:nil];
-        }];
+        
         ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithConf:userConf];
         
         [self.navigationController pushViewController:web animated:YES];
