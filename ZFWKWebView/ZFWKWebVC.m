@@ -29,6 +29,12 @@ NSString * const ZFWKWebViewEventRightButtonClickKey = @"ZFWKWebViewEventRightBu
 NSString * const ZFWKWebViewEventGoBackKey = @"ZFWKWebViewEventGoBackKey";
 NSString * const ZFWKWebViewEventGoForwardKey = @"ZFWKWebViewEventGoForwardKey";
 
+NSString * const ZFWKWebViewEventViewWillAppear = @"ZFWKWebViewEventViewWillAppear";
+NSString * const ZFWKWebViewEventViewWillDisappear = @"ZFWKWebViewEventViewWillDisappear";
+NSString * const ZFWKWebViewEventViewDidDisappear = @"ZFWKWebViewEventViewDidDisappear";
+NSString * const ZFWKWebViewEventViewDidLoad = @"ZFWKWebViewEventViewDidLoad";
+NSString * const ZFWKWebViewEventViewWillLayoutSubviews = @"ZFWKWebViewEventViewWillLayoutSubviews";
+
 static inline BOOL isIPhoneXSeries() {
     BOOL iPhoneXSeries = NO;
     if (UIDevice.currentDevice.userInterfaceIdiom != UIUserInterfaceIdiomPhone) return iPhoneXSeries;
@@ -278,14 +284,26 @@ static inline BOOL isIPhoneXSeries() {
 }
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventViewWillAppear];
+    if (callback) callback(self, self.config, nil);
+    
     [self addJS];
 }
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    
+    zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventViewWillDisappear];
+    if (callback) callback(self, self.config, nil);
+    
     [self removeJS];
 }
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+    
+    zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventViewDidDisappear];
+    if (callback) callback(self, self.config, nil);
+    
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -380,6 +398,11 @@ static inline BOOL isIPhoneXSeries() {
     self.loadFailedView.imageView.image = self.config.refreshButtonImage;
     [self.loadFailedView.hoverButton addTarget:self action:@selector(refresh) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.loadFailedView];
+    
+    
+    zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventViewDidLoad];
+    if (callback) callback(self, self.config, nil);
+    
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
@@ -486,6 +509,10 @@ static inline BOOL isIPhoneXSeries() {
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
+    
+    zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventViewWillLayoutSubviews];
+    if (callback) callback(self, self.config, nil);
+    
     float y = 0;
     float navHeight = 64;
     if (isIPhoneXSeries()) {
@@ -536,13 +563,21 @@ static inline BOOL isIPhoneXSeries() {
     if (callback) callback(self, self.config, button);
 }
 
+- (void)reloadPreviousRequest {
+    [self refresh];
+}
+
 - (void)refresh {
     self.titleLabel.text = [ZFWKWebVCConf localizedStringForKey:@"Loading..."];
     zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventRefreshKey];
     if (callback) callback(self, self.config, nil);
     [self.webView stopLoading];
-    NSURLRequest *req = [[NSURLRequest alloc] initWithURL:self.previousURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:self.config.timeoutDuration];
-    [self.webView loadRequest:req];
+    if (self.previousURL) {
+        NSURLRequest *req = [[NSURLRequest alloc] initWithURL:self.previousURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:self.config.timeoutDuration];
+        [self.webView loadRequest:req];
+    } else {
+        [self.webView reload];
+    }
 }
 - (void)goBack {
     if ([self.webView canGoBack]) [self.webView goBack];

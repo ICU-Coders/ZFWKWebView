@@ -35,6 +35,12 @@ UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventRightButtonClickKey;
 UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventGoBackKey;
 UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventGoForwardKey;
 
+UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventViewWillAppear;
+UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventViewWillDisappear;
+UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventViewDidDisappear;
+UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventViewDidLoad;
+UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventViewWillLayoutSubviews;
+
 @interface ZFWKWebVCConf : NSObject
 /**
  *  ZFWKWebVCPopTypePervious => popViewControllerAnimated (default)
@@ -100,6 +106,7 @@ UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventGoForwardKey;
 
 - (void)evaluateJavaScriptMethodName:(NSString *)name params:(id _Nullable)params callback:(void (^ _Nullable)(id _Nullable body, NSError * _Nullable error))callback;
 - (void)removeUserScript:(NSString *)script;
+- (void)reloadPreviousRequest;
 
 @property (nonatomic, strong, readonly) WKWebView *webView;
 @property (nonatomic, strong, nullable) ZFWKWebVCBottomBar *bottomBar;
