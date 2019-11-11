@@ -150,7 +150,7 @@ static inline BOOL isIPhoneXSeries() {
         _closeButtonGobackFirst = YES;
         _showCloseButton = YES;
         _callbacks = [NSMutableDictionary dictionaryWithCapacity:100];
-        _progressBarHeight = 1;
+        _progressBarHeight = 2;
         _navigationButtonSpace = 0;
         
         NSBundle *imageBundle = SOURCE_BUDNLE;
@@ -174,7 +174,6 @@ static inline BOOL isIPhoneXSeries() {
 }
 - (void)addMethodName:(NSString *)name callback:(zf_wkWebViewEventCallBack)callback {
     if (callback) self.callbacks[name] = callback;
-    
 }
 
 
@@ -338,6 +337,8 @@ static inline BOOL isIPhoneXSeries() {
             button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
             button.titleLabel.textAlignment = NSTextAlignmentRight;
             [button addTarget:self action:@selector(rightButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+            [button setTitleColor:self.config.rightNavigationButtonTextColor forState:UIControlStateNormal];
+            button.titleLabel.font = self.config.rightNavigationButtonTextFont;
             button.hidden = YES;
             button;
         });
@@ -533,7 +534,7 @@ static inline BOOL isIPhoneXSeries() {
         float titleLabelWidth = ZF_SCREEN_WIDTH - maxDistance * 2 - nomalMargin * 2;
         [self.titleLabel setFrame:CGRectMake((ZF_SCREEN_WIDTH - titleLabelWidth) * 0.5, navHeight - btnH, titleLabelWidth, btnH)];
         float progress_height = self.config.progressBarHeight * .5;
-        [self.progressView setFrame:CGRectMake(0, navHeight - self.config.progressBarHeight, ZF_SCREEN_WIDTH, 1)];
+        [self.progressView setFrame:CGRectMake(0, navHeight - self.config.progressBarHeight, ZF_SCREEN_WIDTH, 2)];
         self.progressView.transform = CGAffineTransformMakeScale(1, progress_height);
         [self.navigationRightButon setFrame:CGRectMake(ZF_SCREEN_WIDTH - 10 - rightButtonW, navHeight - btnH, rightButtonW, btnH)];
     }
@@ -695,6 +696,12 @@ static inline BOOL isIPhoneXSeries() {
 }
 - (void)showError:(NSError *)error {
     if (!error) return;
+    
+    if (error.code == NSURLErrorCancelled) {
+        NSLog(@"error.code == NSURLErrorCancelled");
+        return;
+    }
+    
     zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventLoadFailedKey];
     if (callback) callback(self, self.config, error);
     self.loadFailedView.hidden = NO;

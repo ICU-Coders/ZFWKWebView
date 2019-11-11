@@ -29,8 +29,8 @@
         {
            self.showRightNavigationButton = YES;
            self.rightNavigationButtonTitle = @"Skip";
-            self.rightNavigationButtonTextFont = [UIFont systemFontOfSize:13 weight:UIFontWeightRegular];
-            self.rightNavigationButtonTextColor = [UIColor yellowColor];
+//            self.rightNavigationButtonTextFont = [UIFont systemFontOfSize:13 weight:UIFontWeightRegular];
+//            self.rightNavigationButtonTextColor = [UIColor yellowColor];
         }
         {
            self.progressBarHeight = 40;

@@ -39,17 +39,6 @@
         [self.view addSubview:button];
         [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
-    
-//    UIProgressView *pro = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
-//    pro.progress = .5;
-//    [self.view addSubview:pro];
-//    [pro setFrame:CGRectMake(0, 200, 200, 100)];
-//    pro.transform = CGAffineTransformMakeScale(1, 10);
-//
-//    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(200, 200, 100, 2)];
-//    [view setBackgroundColor:[UIColor blueColor]];
-//    view.transform = CGAffineTransformMakeScale(1, 10);
-//    [self.view addSubview:view];
 }
 
 - (void)temp {
@@ -63,7 +52,7 @@
 
     } else {
         ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithDefaultConfig];
-        [web.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://www.apple.com.cn"]]];
+        [web.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://baidu.com"]]];
         [self.navigationController pushViewController:web animated:YES];
     }
     
