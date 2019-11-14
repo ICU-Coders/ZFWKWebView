@@ -496,7 +496,9 @@ static inline BOOL isIPhoneXSeries() {
         } else if ([keyPath isEqualToString:@"openUrl"]) {
             if (!value) return;
             if ([self.webView isLoading]) [self.webView stopLoading];
-            NSString *urlStr = [(NSString *)value stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+            NSMutableCharacterSet *set = [NSCharacterSet URLQueryAllowedCharacterSet].mutableCopy;
+            [set addCharactersInString:@"#"];
+            NSString *urlStr = [(NSString *)value stringByAddingPercentEncodingWithAllowedCharacters:set];
             NSURL *url = [NSURL URLWithString:urlStr];
             NSURLRequest *req = [[NSURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:self.config.timeoutDuration];
             [self.webView loadRequest:req];
