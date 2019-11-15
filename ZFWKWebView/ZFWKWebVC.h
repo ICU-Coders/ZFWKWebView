@@ -78,7 +78,8 @@ UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventViewWillLayoutSubviews;
 
 @property (nonatomic, strong) UIFont *rightNavigationButtonTextFont;
 @property (nonatomic, strong) UIFont *titleFont;
-
+@property(nonatomic, copy, nullable) NSString *titleText; // 默认标题
+@property(nonatomic, assign) BOOL useWebTitleAutomatic; // default YES
 /**
  * If can goback,the back button go back first, close when page is last
  */

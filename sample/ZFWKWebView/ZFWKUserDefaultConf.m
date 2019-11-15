@@ -16,6 +16,8 @@
         {
             self.openUrl = @"https://www.baidu.com/";
             self.timeoutDuration = 2;
+            self.titleText = @"aaa";
+            self.useWebTitleAutomatic = NO;
         }
         {
            self.titleFont = [UIFont systemFontOfSize:33 weight:UIFontWeightBold];

@@ -165,10 +165,12 @@ static inline BOOL isIPhoneXSeries() {
         
         _titleColor = ZF_WK_BLACKCLOLR;
         _titleFont = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
+        _useWebTitleAutomatic = YES;
         _navigationBackgroundColor = ZF_WK_BACKGROUD_COLOR;
         
         _rightNavigationButtonTextFont = [UIFont systemFontOfSize:15 weight:UIFontWeightMedium];
         _rightNavigationButtonTextColor = ZF_WK_BLUE_COLOR;
+        
     }
     return self;
 }
@@ -328,6 +330,7 @@ static inline BOOL isIPhoneXSeries() {
         self.titleLabel = ({
             UILabel *label = [[UILabel alloc] init];
             label.textAlignment = NSTextAlignmentCenter;
+            label.text = self.config.titleText;
             label;
         });
         [view addSubview:self.titleLabel];
@@ -417,7 +420,8 @@ static inline BOOL isIPhoneXSeries() {
     }
     if ([object isKindOfClass:[WKWebView class]]) {
         if ([keyPath isEqualToString:@"title"]) {
-            self.titleLabel.text = (NSString *)value;
+            NSString *title = (NSString *)value;
+            if (title && title.length > 0 && self.config.useWebTitleAutomatic) self.titleLabel.text = (NSString *)value;
         } else if ([keyPath isEqualToString:@"canGoBack"]) {
             BOOL canGoBack =  [value boolValue];
             self.config.canGoBack = canGoBack;
