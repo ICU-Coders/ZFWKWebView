@@ -35,12 +35,7 @@ Alternatively you can directly add the `ZFWKWebView.h` and `ZFWKWebView.m` sourc
 
 ##  Usage
 
-###  DefaultConfig
-```
-ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithDefaultConfig];
-[web.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://www.apple.com.cn"]]];
-[self presentViewController:web animated:YES completion:nil];
-```
+
 ### Custom Config
 Subclass config from `ZFWKWebVCConf`
 ```
@@ -48,6 +43,14 @@ Subclass config from `ZFWKWebVCConf`
 ZFWKUserDefaultConf *userConf = [[ZFWKUserDefaultConf alloc] init];
 ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithConf:userConf];
 ```
+
+###  DefaultConfig
+```
+ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithDefaultConfig];
+[web.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://www.apple.com.cn"]]];
+[self presentViewController:web animated:YES completion:nil];
+```
+
 ### Register js or event with config
 Body is serialization response 
 ```
