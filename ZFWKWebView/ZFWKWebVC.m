@@ -531,8 +531,8 @@ static inline BOOL isIPhoneXSeries() {
         float btnW = 44 - 10;
         float btnH = 44;
         float nomalMargin = self.config.navigationButtonSpace;
-        [self.backButton setFrame:CGRectMake(nomalMargin, navHeight - btnH, btnW, btnH)];
-        [self.closeButton setFrame:CGRectMake(nomalMargin + btnW + nomalMargin, navHeight - btnH, btnW, btnH)];
+        [self.backButton setFrame:CGRectMake(0, navHeight - btnH, btnW, btnH)];
+        [self.closeButton setFrame:CGRectMake(nomalMargin + btnW, navHeight - btnH, btnW, btnH)];
         float rightButtonW = 80;
         float left = nomalMargin + btnW + nomalMargin + btnW + nomalMargin;
         float right = rightButtonW;
