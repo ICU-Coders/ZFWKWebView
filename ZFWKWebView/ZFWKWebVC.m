@@ -2,8 +2,8 @@
 //  ZFWKWebVC.m
 //  ZFWKWebView
 //
-//  Created by 张帆 on 2019/9/19.
-//  Copyright © 2019 张帆. All rights reserved.
+//  Created by Pokey on 2019/9/19.
+//  Copyright © 2019 Pokey. All rights reserved.
 //
 
 #import "ZFWKWebVC.h"
@@ -17,7 +17,7 @@
 #define ZF_SCREEN_WIDTH self.view.frame.size.width
 #define ZF_SCREEN_HEIGHT self.view.frame.size.height
 
-#define SOURCE_BUDNLE [NSBundle bundleWithURL:[[NSBundle bundleForClass:[ZFWKWebVC class]] URLForResource:@"ImageResource" withExtension:@"bundle"]]
+#define SOURCE_BUDNLE [NSBundle bundleWithURL:[[NSBundle bundleForClass:[ZFWKWebVC class]] URLForResource:@"ImageResource" withExtension:@"bundle"]?:[NSURL URLWithString:@""]]
 
 NSString * const ZFWKWebViewEventStartLoadKey = @"ZFWKWebViewEventStartLoadKey";
 NSString * const ZFWKWebViewEventStartRecevicedKey = @"ZFWKWebViewEventStartRecevicedKey";
