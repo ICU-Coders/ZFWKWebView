@@ -14,7 +14,7 @@
     self = [super init];
     if (self) {
         {
-            self.openUrl = @"https://www.baidu.com/";
+            self.openUrl = @"https://baidu.com";
             self.timeoutDuration = 2;
             self.titleText = @"aaa";
             self.useWebTitleAutomatic = NO;

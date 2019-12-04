@@ -17,7 +17,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // http://10.10.40.32:9999/
+    
     [self.view setBackgroundColor:[UIColor whiteColor]];
     [[[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:@"https://www.baidu.com"]] resume];
     

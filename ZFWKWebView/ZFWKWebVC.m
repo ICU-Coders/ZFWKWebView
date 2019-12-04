@@ -255,6 +255,10 @@ static inline BOOL isIPhoneXSeries() {
 - (instancetype)initWithConf:(ZFWKWebVCConf *)conf {
     self = [super init];
     if (self) {
+        
+        self.hidesBottomBarWhenPushed = YES;
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+        
         _config = conf;
         lastPostion = 0;
         scrollJudgeDistance = 100;
@@ -500,10 +504,7 @@ static inline BOOL isIPhoneXSeries() {
         } else if ([keyPath isEqualToString:@"openUrl"]) {
             if (!value) return;
             if ([self.webView isLoading]) [self.webView stopLoading];
-            NSMutableCharacterSet *set = [NSCharacterSet URLQueryAllowedCharacterSet].mutableCopy;
-            [set addCharactersInString:@"#"];
-            NSString *urlStr = [(NSString *)value stringByAddingPercentEncodingWithAllowedCharacters:set];
-            NSURL *url = [NSURL URLWithString:urlStr];
+            NSURL *url = [NSURL URLWithString:value];
             NSURLRequest *req = [[NSURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:self.config.timeoutDuration];
             [self.webView loadRequest:req];
         } else if ([keyPath isEqualToString:@"showCloseButton"]) {
