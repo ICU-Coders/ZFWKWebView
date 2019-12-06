@@ -615,7 +615,10 @@ static inline BOOL isIPhoneXSeries() {
     zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventCloseKey];
     if (callback) callback(self, self.config, nil);
     
-    if (self.navigationController.topViewController == self) {
+    if (self.presentingViewController) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+        
+    } else {
         switch (self.config.popType) {
             case ZFWKWebVCPopTypeRoot:
                 [self.navigationController popToRootViewControllerAnimated:YES];
@@ -625,8 +628,6 @@ static inline BOOL isIPhoneXSeries() {
                 [self.navigationController popViewControllerAnimated:YES];
                 break;
         }
-    } else {
-        [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 
