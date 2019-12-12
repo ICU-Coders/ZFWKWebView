@@ -41,6 +41,8 @@ UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventViewDidDisappear;
 UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventViewDidLoad;
 UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventViewWillLayoutSubviews;
 
+
+
 @interface ZFWKWebVCConf : NSObject
 /**
  *  ZFWKWebVCPopTypePervious => popViewControllerAnimated (default)
@@ -99,8 +101,6 @@ UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventViewWillLayoutSubviews;
 
 
 
-
-
 @interface ZFWKWebVC : UIViewController
 - (instancetype)initWithDefaultConfig;
 - (instancetype)initWithConf:(ZFWKWebVCConf *)conf;
@@ -108,6 +108,9 @@ UIKIT_EXTERN ZFWKWebViewEventKey const ZFWKWebViewEventViewWillLayoutSubviews;
 - (void)evaluateJavaScriptMethodName:(NSString *)name params:(id _Nullable)params callback:(void (^ _Nullable)(id _Nullable body, NSError * _Nullable error))callback;
 - (void)removeUserScript:(NSString *)script;
 - (void)reloadPreviousRequest;
+
+- (void)clearAllCaches API_AVAILABLE(ios(9.0));
+- (void)clearCachesWithSet:(NSSet *)cacheSet API_AVAILABLE(ios(9.0));
 
 @property (nonatomic, strong, readonly) WKWebView *webView;
 @property (nonatomic, strong, nullable) ZFWKWebVCBottomBar *bottomBar;

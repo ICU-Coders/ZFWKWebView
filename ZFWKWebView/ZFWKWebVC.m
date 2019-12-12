@@ -750,10 +750,34 @@ static inline BOOL isIPhoneXSeries() {
             callback(self, self.config, message.body);
         }
     }
-    
-    
 }
 
+- (void)clearAllCaches {
+    if (@available(iOS 9.0, *)) {
+        NSSet *cacheTypes = [NSSet setWithArray:@[
+            WKWebsiteDataTypeMemoryCache,
+            WKWebsiteDataTypeSessionStorage,
+            WKWebsiteDataTypeDiskCache,
+            WKWebsiteDataTypeOfflineWebApplicationCache,
+            WKWebsiteDataTypeCookies,
+            WKWebsiteDataTypeLocalStorage,
+            WKWebsiteDataTypeIndexedDBDatabases,
+            WKWebsiteDataTypeWebSQLDatabases,
+        ]];
+        [self clearCachesWithSet:cacheTypes];
+    } else {
+       NSLog(@"API %s support @available(iOS 9.0, *)", __func__);
+    }
+}
 
+- (void)clearCachesWithSet:(NSSet *)cacheSet {
+    if (@available(iOS 9.0, *)) {
+        [[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:cacheSet
+                                                   modifiedSince:[NSDate dateWithTimeIntervalSince1970:0]
+                                               completionHandler:^{}];
+    } else {
+        NSLog(@"API %s support @available(iOS 9.0, *)", __func__);
+    }
+}
 
 @end
