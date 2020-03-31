@@ -277,32 +277,36 @@ static inline BOOL isIPhoneXSeries() {
 }
 
 - (void)addJS {
-    [self.webView.configuration.userContentController removeAllUserScripts];
-    for (NSString *methodName in self.config.callbacks.allKeys) {
-        [self.webView.configuration.userContentController addScriptMessageHandler:self name:methodName];
-    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        for (NSString *methodName in self.config.callbacks.allKeys) {
+            [self.webView.configuration.userContentController addScriptMessageHandler:self name:methodName];
+        }
+    });
 }
+
 - (void)removeJS {
-    for (NSString *name in self.config.callbacks.allKeys) {
-        [self.webView.configuration.userContentController removeScriptMessageHandlerForName:name];
-    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        for (NSString *name in self.config.callbacks.allKeys) {
+            [self.webView.configuration.userContentController removeScriptMessageHandlerForName:name];
+        }
+    });
 }
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
     zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventViewWillAppear];
     if (callback) callback(self, self.config, nil);
-    
+    [self removeJS];
     [self addJS];
 }
+
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    
     zf_wkWebViewEventCallBack callback = self.config.callbacks[ZFWKWebViewEventViewWillDisappear];
     if (callback) callback(self, self.config, nil);
-    
     [self removeJS];
 }
+
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
@@ -310,6 +314,7 @@ static inline BOOL isIPhoneXSeries() {
     if (callback) callback(self, self.config, nil);
     
 }
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     if (self.navigationController.navigationBar) self.navigationController.navigationBar.hidden = YES;
@@ -726,7 +731,24 @@ static inline BOOL isIPhoneXSeries() {
 }
 
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
-    decisionHandler(WKNavigationActionPolicyAllow);
+    NSURL *currentUrl = navigationAction.request.URL;
+    NSString *path = [currentUrl absoluteString].lowercaseString;
+    NSLog(@"path:%@", path);
+    if ([path hasPrefix:@"tel:"] ||
+        [path hasPrefix:@"telprompt:"] ||
+        [path hasPrefix:@"sms:"]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([[UIApplication sharedApplication] canOpenURL:currentUrl]) {
+                [[UIApplication sharedApplication] openURL:currentUrl];
+                decisionHandler(WKNavigationActionPolicyCancel);
+            } else {
+                decisionHandler(WKNavigationActionPolicyAllow);
+            }
+        });
+    } else {
+        decisionHandler(WKNavigationActionPolicyAllow);
+    }
+    
 }
 
 

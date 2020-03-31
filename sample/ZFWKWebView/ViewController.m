@@ -52,7 +52,10 @@
 
     } else {
         ZFWKWebVC *web = [[ZFWKWebVC alloc] initWithDefaultConfig];
-        [web.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://baidu.com"]]];
+        NSURL *fileUrl =  [[NSBundle mainBundle] URLForResource:@"temp.html" withExtension:nil];
+        [web.webView loadFileURL:fileUrl allowingReadAccessToURL:fileUrl];
+        
+//        [web.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://baidu.com"]]];
         [self.navigationController pushViewController:web animated:YES];
     }
     

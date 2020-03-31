@@ -17,6 +17,7 @@
 		7D9E7165234D6F9800F9BEE4 /* ZFWKWebVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D9E7162234D6F9800F9BEE4 /* ZFWKWebVC.m */; };
 		7D9E7168234D709000F9BEE4 /* ZFWKUserDefaultConf.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D9E7167234D709000F9BEE4 /* ZFWKUserDefaultConf.m */; };
 		7DC5CEA92361703A00D307FE /* ZFWKWebViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5CEA82361703A00D307FE /* ZFWKWebViewTests.m */; };
+		7DE872382433091F0069C6C3 /* temp.html in Resources */ = {isa = PBXBuildFile; fileRef = 7DE872372433091F0069C6C3 /* temp.html */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,7 @@
 		7DC5CEA62361703A00D307FE /* ZFWKWebViewTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZFWKWebViewTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DC5CEA82361703A00D307FE /* ZFWKWebViewTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZFWKWebViewTests.m; sourceTree = "<group>"; };
 		7DC5CEAA2361703A00D307FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7DE872372433091F0069C6C3 /* temp.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = temp.html; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 				7D9E7142234D6EE900F9BEE4 /* AppDelegate.m */,
 				7D9E7147234D6EE900F9BEE4 /* ViewController.h */,
 				7D9E7148234D6EE900F9BEE4 /* ViewController.m */,
+				7DE872372433091F0069C6C3 /* temp.html */,
 				7D9E7166234D709000F9BEE4 /* ZFWKUserDefaultConf.h */,
 				7D9E7167234D709000F9BEE4 /* ZFWKUserDefaultConf.m */,
 				7D9E714A234D6EE900F9BEE4 /* Main.storyboard */,
@@ -211,6 +214,7 @@
 				7D9E7151234D6EEA00F9BEE4 /* LaunchScreen.storyboard in Resources */,
 				7D9E714E234D6EEA00F9BEE4 /* Assets.xcassets in Resources */,
 				7D9E714C234D6EE900F9BEE4 /* Main.storyboard in Resources */,
+				7DE872382433091F0069C6C3 /* temp.html in Resources */,
 				7D9E7164234D6F9800F9BEE4 /* ImageResource.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
