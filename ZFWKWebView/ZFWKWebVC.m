@@ -733,7 +733,6 @@ static inline BOOL isIPhoneXSeries() {
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
     NSURL *currentUrl = navigationAction.request.URL;
     NSString *path = [currentUrl absoluteString].lowercaseString;
-    NSLog(@"path:%@", path);
     if ([path hasPrefix:@"tel:"] ||
         [path hasPrefix:@"telprompt:"] ||
         [path hasPrefix:@"sms:"]) {
